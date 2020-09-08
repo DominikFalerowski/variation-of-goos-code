@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static auctionsniper.AuctionEventListener.PriceSource.FromOtherBidder;
+import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,20 +30,25 @@ class AuctionSniperTest {
     }
 
     @Test
-    void reportsLoseWhenAuctionCloses() {
+    void reportsLoseIfAuctionClosesImmediately() {
         sniper.auctionClosed();
 
         verify(sniperListener, times(1)).sniperLost();
     }
 
     @Test
-    void bidsHigherAndReportsBiddingWhenNewPriceArrives() {
-        int price = 1001;
-        int increment = 25;
+    void reportLostIfAuctionClosesWhenBidding() {
+        sniper.currentPrice(123, 45, FromOtherBidder);
+        sniper.auctionClosed();
 
-        sniper.currentPrice(price, increment);
+        verify(sniperListener, atLeastOnce()).sniperLost();
+    }
 
-        verify(auction, times(1)).bid(price + increment);
-        verify(sniperListener, atLeastOnce()).sniperBidding();
+    @Test
+    void reportsWonIfAuctionClosesWhenWinning() {
+        sniper.currentPrice(123, 45, FromSniper);
+        sniper.auctionClosed();
+
+        verify(sniperListener, atLeastOnce()).sniperWinning();
     }
 }

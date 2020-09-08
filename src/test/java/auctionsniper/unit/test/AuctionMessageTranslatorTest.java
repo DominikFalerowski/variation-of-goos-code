@@ -1,6 +1,7 @@
 package auctionsniper.unit.test;
 
 import auctionsniper.AuctionEventListener;
+import auctionsniper.AuctionEventListener.PriceSource;
 import auctionsniper.AuctionMessageTranslator;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.packet.Message;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class AuctionMessageTranslatorTest {
 
+    private static final String SNIPER_ID = "SNIPER ID";
     @Mock
     AuctionEventListener listener;
 
@@ -27,7 +29,7 @@ class AuctionMessageTranslatorTest {
 
     @BeforeEach
     void setUp() {
-        translator = new AuctionMessageTranslator(listener);
+        translator = new AuctionMessageTranslator(SNIPER_ID, listener);
     }
 
     @Test
@@ -41,13 +43,23 @@ class AuctionMessageTranslatorTest {
     }
 
     @Test
-    void notifiesBidDetailsWhenCurrentPriceMessageReceived() {
+    void notifiesBidDetailsWhenCurrentPriceMessageReceivedFromOtherBidder() {
         Message message = new Message();
         message.setBody("SQLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: Someone else;");
 
         translator.newIncomingMessage(UNUSED_ENTITY, message, UNUSED_CHAT);
 
-        verify(listener, times(1)).currentPrice(192, 7);
+        verify(listener, times(1)).currentPrice(192, 7, PriceSource.FromOtherBidder);
+    }
+
+    @Test
+    void notifiesBidDetailsWhenCurrentPriceMessageReceivedFromSniper() {
+        Message message = new Message();
+        message.setBody("SQLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: " + SNIPER_ID +";");
+
+        translator.newIncomingMessage(UNUSED_ENTITY, message, UNUSED_CHAT);
+
+        verify(listener, times(1)).currentPrice(192, 7, PriceSource.FromSniper);
     }
 
 }

@@ -47,7 +47,7 @@ public class Main {
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
         Auction auction = new XMPPAuction(chat);
-        chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(auction, new SniperStateDisplayer(ui))));
+        chatManager.addIncomingListener(new AuctionMessageTranslator(connection.getUser().toString(), new AuctionSniper(auction, new SniperStateDisplayer(ui))));
         auction.join();
     }
 
