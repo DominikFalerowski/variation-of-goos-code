@@ -52,20 +52,13 @@ public class Main implements SniperListener {
         SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
     }
 
-    private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException, SmackException.NotConnectedException, InterruptedException {
+    private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException {
         disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
-        Auction auction = amount -> {
-            try {
-                chat.send(format(BID_COMMAND_FORMAT, amount));
-            } catch (SmackException.NotConnectedException | InterruptedException e) {
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
-        };
+        Auction auction = new XMPPAuction(chat);
         chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
-        chat.send(JOIN_COMMAND_FORMAT);
+        auction.join();
     }
 
     private void disconnectWhenUICloses(AbstractXMPPConnection connection) {
