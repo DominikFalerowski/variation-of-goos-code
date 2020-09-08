@@ -19,7 +19,7 @@ import java.io.IOException;
 import static auctionsniper.ConnectionConfig.configuration;
 import static java.lang.String.format;
 
-public class Main implements SniperListener {
+public class Main {
 
     public static final String BID_COMMAND_FORMAT = "SQLVersion: 1.1; Command: BID; Price: %d";
     public static final String JOIN_COMMAND_FORMAT = "SQLVersion: 1.1; Command: JOIN";
@@ -42,22 +42,12 @@ public class Main implements SniperListener {
         main.joinAuction(connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]), args[ARG_ITEM_ID]);
     }
 
-    @Override
-    public void sniperLost() {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-    }
-
-    @Override
-    public void sniperBidding() {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
-    }
-
     private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException {
         disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
         Auction auction = new XMPPAuction(chat);
-        chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
+        chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(auction, new SniperStateDisplayer(ui))));
         auction.join();
     }
 
