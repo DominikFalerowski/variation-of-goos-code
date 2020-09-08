@@ -5,9 +5,6 @@ import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jxmpp.jid.EntityBareJid;
 
-import java.util.Arrays;
-import java.util.HashMap;
-
 public class AuctionMessageTranslator implements IncomingChatMessageListener {
 
     private final AuctionEventListener listener;
@@ -19,22 +16,13 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
 
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
-        HashMap<String, String> event = unpackEventFrom(message);
-        String type = event.get("Event");
-        if ("CLOSE".equals(type)) {
+        AuctionEvent event = AuctionEvent.from(message.getBody());
+        String eventType = event.type();
+
+        if ("CLOSE".equals(eventType)) {
             listener.auctionClosed();
-        } else if ("PRICE".equals(type)) {
-            listener.currentPrice(Integer.parseInt(event.get("CurrentPrice")), Integer.parseInt(event.get("Increment")));
+        } else if ("PRICE".equals(eventType)) {
+            listener.currentPrice(event.currentPrice(), event.increment());
         }
-    }
-
-    private HashMap<String, String> unpackEventFrom(Message message) {
-        HashMap<String, String> event = new HashMap<>();
-        Arrays.stream(message.getBody().split(";")).forEach(element -> {
-            String[] pair = element.split(":");
-            event.put(pair[0].trim(), pair[1].trim());
-        });
-
-        return event;
     }
 }
