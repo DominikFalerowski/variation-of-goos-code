@@ -10,7 +10,6 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
-import org.minidns.record.A;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -62,6 +61,7 @@ public class Main implements SniperListener {
                 chat.send(format(BID_COMMAND_FORMAT, amount));
             } catch (SmackException.NotConnectedException | InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         };
         chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));

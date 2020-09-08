@@ -13,7 +13,7 @@ class AuctionSniperEndToEndTest {
     @BeforeEach
     void setUp() throws XmppStringprepException {
         auction = new FakeAuctionServer("item-54321");
-        application =  new ApplicationRunner();
+        application = new ApplicationRunner();
     }
 
     @AfterEach
