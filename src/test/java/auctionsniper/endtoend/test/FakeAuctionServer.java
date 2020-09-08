@@ -63,7 +63,7 @@ class FakeAuctionServer {
     }
 
     public void reportPrice(int price, int increment, String bidder) throws SmackException.NotConnectedException, InterruptedException {
-        currentChat.send(format("SQLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder %s;",
+        currentChat.send(format("SQLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder: %s;",
                 price, increment, bidder));
 
     }

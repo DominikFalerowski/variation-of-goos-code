@@ -10,6 +10,7 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
+import org.minidns.record.A;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -17,6 +18,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import static auctionsniper.ConnectionConfig.configuration;
+import static java.lang.String.format;
 
 public class Main implements SniperListener {
 
@@ -48,15 +50,21 @@ public class Main implements SniperListener {
 
     @Override
     public void sniperBidding() {
-
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_BIDDING));
     }
 
     private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException, SmackException.NotConnectedException, InterruptedException {
         disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
-        Auction nullAuction = amount -> { };
-        chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(nullAuction, this)));
+        Auction auction = amount -> {
+            try {
+                chat.send(format(BID_COMMAND_FORMAT, amount));
+            } catch (SmackException.NotConnectedException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+        chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
         chat.send(JOIN_COMMAND_FORMAT);
     }
 
@@ -78,6 +86,6 @@ public class Main implements SniperListener {
     }
 
     private static String auctionId(String itemId, AbstractXMPPConnection connection) {
-        return String.format(AUCTION_ID_FORMAT, itemId, connection.getUser().getDomain());
+        return format(AUCTION_ID_FORMAT, itemId, connection.getUser().getDomain());
     }
 }
