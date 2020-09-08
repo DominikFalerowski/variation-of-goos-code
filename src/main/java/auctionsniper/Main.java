@@ -55,7 +55,8 @@ public class Main implements SniperListener {
         disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
-        chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(new Auction(), this)));
+        Auction nullAuction = amount -> { };
+        chatManager.addIncomingListener(new AuctionMessageTranslator(new AuctionSniper(nullAuction, this)));
         chat.send(JOIN_COMMAND_FORMAT);
     }
 
