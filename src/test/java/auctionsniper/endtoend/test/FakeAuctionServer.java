@@ -1,5 +1,6 @@
 package auctionsniper.endtoend.test;
 
+import auctionsniper.Main;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -24,7 +25,7 @@ class FakeAuctionServer {
 
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_RESOURCE = "Auction";
-    public static final String XMPP_HOSTNAME = "localhost";
+    public static final String XMPP_HOSTNAME = "desktop-eut9frn.mshome.net";
 
     private static final String AUCTION_PASSWORD = "auction";
 
@@ -49,24 +50,42 @@ class FakeAuctionServer {
         return itemId;
     }
 
-    public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-        messageListener.receivesAMessage();
+    public void hasReceivedJoinRequestFromSniper(String sniperId) throws InterruptedException {
+        receivesAMessageMatching(sniperId, Main.JOIN_COMMAND_FORMAT);
     }
 
     public void announceClosed() throws SmackException.NotConnectedException, InterruptedException {
-        currentChat.send("Closing auction...");
+        currentChat.send("SQLVersion: 1.1; Event: CLOSE;");
     }
 
     public void stop() {
         connection.disconnect();
     }
 
+    public void reportPrice(int price, int increment, String bidder) throws SmackException.NotConnectedException, InterruptedException {
+        currentChat.send(format("SQLVersion: 1.1; Event: PRICE; CurrentPrice: %d; Increment: %d; Bidder %s;",
+                price, increment, bidder));
+
+    }
+
+    public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+        receivesAMessageMatching(sniperId, format(Main.BID_COMMAND_FORMAT, bid));
+    }
+
+    void receivesAMessageMatching(String sniperId, String body) throws InterruptedException {
+        messageListener.receivesAMessage(body);
+        assertThat(currentChat.getXmppAddressOfChatPartner().toString()).isEqualTo(sniperId);
+    }
+
     private static class SingleMessageListener implements IncomingChatMessageListener {
+
         private final ArrayBlockingQueue<Message> messages = new ArrayBlockingQueue<>(1);
 
-
-        void receivesAMessage() throws InterruptedException {
-            assertThat(messages.poll(5, TimeUnit.SECONDS)).isNotNull();
+        void receivesAMessage(String body) throws InterruptedException {
+            Message message = messages.poll(5, TimeUnit.SECONDS);
+            assertThat(message).isNotNull();
+            assertThat(body).isNotNull();
+            assertThat(message.getBody()).isEqualTo(body);
         }
 
         @Override

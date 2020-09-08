@@ -12,12 +12,16 @@ import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import static auctionsniper.ConnectionConfig.configuration;
 
-public class Main {
+public class Main implements AuctionEventListener {
 
+    public static final String BID_COMMAND_FORMAT = "SQLVersion: 1.1; Command: BID; Price: %d";
+    public static final String JOIN_COMMAND_FORMAT = "SQLVersion: 1.1; Command: JOIN";
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
     private static final int ARG_PASSWORD = 2;
@@ -37,12 +41,31 @@ public class Main {
         main.joinAuction(connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]), args[ARG_ITEM_ID]);
     }
 
+    @Override
+    public void auctionClosed() {
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
+    }
+
+    @Override
+    public void currentPrice(int price, int increment) {
+
+    }
 
     private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException, SmackException.NotConnectedException, InterruptedException {
+        disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
-        chat.send("Joining auction...");
-        chatManager.addIncomingListener((from, message, aChat) -> SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST)));
+        chatManager.addIncomingListener(new AuctionMessageTranslator(this));
+        chat.send(JOIN_COMMAND_FORMAT);
+    }
+
+    private void disconnectWhenUICloses(AbstractXMPPConnection connection) {
+        ui.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                connection.disconnect();
+            }
+        });
     }
 
     private static AbstractXMPPConnection connection(String hostname, String username, String password) throws XMPPException, InterruptedException, IOException, SmackException {
@@ -56,5 +79,4 @@ public class Main {
     private static String auctionId(String itemId, AbstractXMPPConnection connection) {
         return String.format(AUCTION_ID_FORMAT, itemId, connection.getUser().getDomain());
     }
-
 }
