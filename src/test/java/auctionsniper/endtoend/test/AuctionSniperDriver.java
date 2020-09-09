@@ -3,7 +3,8 @@ package auctionsniper.endtoend.test;
 import auctionsniper.MainWindow;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JLabelFixture;
+import org.assertj.swing.fixture.JTableCellFixture;
+import org.assertj.swing.fixture.JTableFixture;
 import org.assertj.swing.timing.Condition;
 
 import static org.assertj.swing.timing.Pause.pause;
@@ -20,11 +21,12 @@ class AuctionSniperDriver {
 
 
     public void showsSniperStatus(String status) {
-        JLabelFixture label = window.label(MainWindow.SNIPER_STATUS_NAME);
+        JTableFixture table = window.table(MainWindow.SNIPERS_TABLE_NAME);
+        JTableCellFixture cell = table.cell(status);
         pause(new Condition("Waiting to change text") {
             @Override
             public boolean test() {
-                return label.text().equals(status);
+                return cell != null && cell.value().equals(status);
             }
         }, 1000);
 
