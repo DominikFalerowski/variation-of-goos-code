@@ -6,7 +6,9 @@ import static auctionsniper.MainWindow.STATUS_JOINING;
 
 class SnipersTableModel extends AbstractTableModel {
 
+    private static final SniperState STARTING_UP = new SniperState("", 0, 0);
     private String statusText = STATUS_JOINING;
+    private SniperState sniperState = STARTING_UP;
 
     public void setStatusText(String statusText) {
         this.statusText = statusText;
@@ -20,24 +22,28 @@ class SnipersTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 1;
+        return Column.values().length;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return statusText;
+        switch (Column.at(columnIndex)) {
+            case ITEM_IDENTIFIER:
+                return sniperState.getItemId();
+            case LAST_PRICE:
+                return sniperState.getLastPrice();
+            case LAST_BID:
+                return sniperState.getLastBid();
+            case SNIPER_STATUS:
+                return statusText;
+            default:
+                throw new IllegalArgumentException("No column at " + columnIndex);
+        }
     }
 
     public void sniperStatusChanged(SniperState sniperState, String statusText) {
-
-    }
-
-    public enum Column {
-        ITEM_IDENTIFIER,
-        LAST_PRICE,
-        LAST_BID,
-        SNIPER_STATUS;
-
-        public static Column at(int offset) { return values()[offset]; }
+        this.sniperState = sniperState;
+        this.statusText = statusText;
+        fireTableRowsUpdated(0, 0);
     }
 }

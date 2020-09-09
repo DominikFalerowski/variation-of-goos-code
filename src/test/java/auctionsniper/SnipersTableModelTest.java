@@ -3,13 +3,17 @@ package auctionsniper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.verification.VerificationMode;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,22 +33,22 @@ class SnipersTableModelTest {
 
     @Test
     void hasEnoughColumns() {
-        assertThat(model.getColumnCount()).isEqualTo(SnipersTableModel.Column.values().length);
+        assertThat(model.getColumnCount()).isEqualTo(Column.values().length);
     }
 
     @Test
     void setsSniperValuesInColumns() {
         model.sniperStatusChanged(new SniperState("item id", 555, 666), MainWindow.STATUS_BIDDING);
 
-        verify(listener, times(1)).tableChanged(new TableModelEvent(model, 0));
-        assertColumnEquals(SnipersTableModel.Column.ITEM_IDENTIFIER, "item id");
-        assertColumnEquals(SnipersTableModel.Column.LAST_PRICE, 555);
-        assertColumnEquals(SnipersTableModel.Column.LAST_BID, 666);
-        assertColumnEquals(SnipersTableModel.Column.SNIPER_STATUS, MainWindow.STATUS_BIDDING);
+        verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0)));
+        assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");
+        assertColumnEquals(Column.LAST_PRICE, 555);
+        assertColumnEquals(Column.LAST_BID, 666);
+        assertColumnEquals(Column.SNIPER_STATUS, MainWindow.STATUS_BIDDING);
 
     }
 
-    private void assertColumnEquals(SnipersTableModel.Column column, Object expected) {
+    private void assertColumnEquals(Column column, Object expected) {
         int rowIndex = 0;
         int columnIndex = column.ordinal();
         assertThat(model.getValueAt(rowIndex, columnIndex)).isEqualTo(expected);
