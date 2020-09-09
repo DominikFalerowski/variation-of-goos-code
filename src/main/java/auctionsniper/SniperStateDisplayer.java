@@ -17,7 +17,7 @@ class SniperStateDisplayer implements SniperListener {
 
     @Override
     public void sniperBidding(SniperSnapshot sniperSnapshot) {
-        ui.sniperStatusChanged(sniperSnapshot, MainWindow.STATUS_BIDDING);
+        ui.sniperStatusChanged(sniperSnapshot);
     }
 
     @Override
