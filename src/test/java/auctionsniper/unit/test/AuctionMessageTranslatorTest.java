@@ -49,7 +49,7 @@ class AuctionMessageTranslatorTest {
 
         translator.newIncomingMessage(UNUSED_ENTITY, message, UNUSED_CHAT);
 
-        verify(listener, times(1)).currentPrice(192, 7, PriceSource.FromOtherBidder);
+        verify(listener, times(1)).currentPrice(192, 7, PriceSource.FROM_OTHER_BIDDER);
     }
 
     @Test
@@ -59,7 +59,7 @@ class AuctionMessageTranslatorTest {
 
         translator.newIncomingMessage(UNUSED_ENTITY, message, UNUSED_CHAT);
 
-        verify(listener, times(1)).currentPrice(192, 7, PriceSource.FromSniper);
+        verify(listener, times(1)).currentPrice(192, 7, PriceSource.FROM_SNIPER);
     }
 
 }

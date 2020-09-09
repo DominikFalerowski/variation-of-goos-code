@@ -3,8 +3,8 @@ package auctionsniper;
 import java.util.HashMap;
 import java.util.Map;
 
-import static auctionsniper.AuctionEventListener.PriceSource.FromOtherBidder;
-import static auctionsniper.AuctionEventListener.PriceSource.FromSniper;
+import static auctionsniper.AuctionEventListener.PriceSource.FROM_OTHER_BIDDER;
+import static auctionsniper.AuctionEventListener.PriceSource.FROM_SNIPER;
 
 class AuctionEvent {
 
@@ -24,7 +24,7 @@ class AuctionEvent {
     }
 
     public AuctionEventListener.PriceSource isFrom(String sniperId) {
-        return sniperId.equals(bidder()) ? FromSniper : FromOtherBidder;
+        return sniperId.equals(bidder()) ? FROM_SNIPER : FROM_OTHER_BIDDER;
     }
 
     static AuctionEvent from(String messageBody) {

@@ -5,8 +5,8 @@ import javax.swing.table.AbstractTableModel;
 public class SnipersTableModel extends AbstractTableModel {
 
     private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.BIDDING);
+    private static final String[] STATUS_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won"};
     private SniperSnapshot sniperSnapshot = STARTING_UP;
-    private static String[] STATUS_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won"};
 
     @Override
     public int getRowCount() {
