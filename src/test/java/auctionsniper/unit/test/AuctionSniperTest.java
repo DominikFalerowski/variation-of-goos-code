@@ -3,7 +3,7 @@ package auctionsniper.unit.test;
 import auctionsniper.Auction;
 import auctionsniper.AuctionSniper;
 import auctionsniper.SniperListener;
-import auctionsniper.SniperState;
+import auctionsniper.SniperSnapshot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,6 +62,6 @@ class AuctionSniperTest {
         sniper.currentPrice(price, increment, FromOtherBidder);
 
         verify(auction, times(1)).bid(bid);
-        verify(sniperListener, atLeastOnce()).sniperBidding(any(SniperState.class));
+        verify(sniperListener, atLeastOnce()).sniperBidding(any(SniperSnapshot.class));
     }
 }

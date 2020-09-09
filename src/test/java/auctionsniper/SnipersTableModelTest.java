@@ -3,11 +3,8 @@ package auctionsniper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.verification.VerificationMode;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -38,7 +35,7 @@ class SnipersTableModelTest {
 
     @Test
     void setsSniperValuesInColumns() {
-        model.sniperStatusChanged(new SniperState("item id", 555, 666), MainWindow.STATUS_BIDDING);
+        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666), MainWindow.STATUS_BIDDING);
 
         verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0)));
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");

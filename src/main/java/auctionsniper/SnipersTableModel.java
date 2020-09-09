@@ -6,9 +6,9 @@ import static auctionsniper.MainWindow.STATUS_JOINING;
 
 class SnipersTableModel extends AbstractTableModel {
 
-    private static final SniperState STARTING_UP = new SniperState("", 0, 0);
+    private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0);
     private String statusText = STATUS_JOINING;
-    private SniperState sniperState = STARTING_UP;
+    private SniperSnapshot sniperSnapshot = STARTING_UP;
 
     public void setStatusText(String statusText) {
         this.statusText = statusText;
@@ -29,11 +29,11 @@ class SnipersTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (Column.at(columnIndex)) {
             case ITEM_IDENTIFIER:
-                return sniperState.getItemId();
+                return sniperSnapshot.getItemId();
             case LAST_PRICE:
-                return sniperState.getLastPrice();
+                return sniperSnapshot.getLastPrice();
             case LAST_BID:
-                return sniperState.getLastBid();
+                return sniperSnapshot.getLastBid();
             case SNIPER_STATUS:
                 return statusText;
             default:
@@ -41,8 +41,8 @@ class SnipersTableModel extends AbstractTableModel {
         }
     }
 
-    public void sniperStatusChanged(SniperState sniperState, String statusText) {
-        this.sniperState = sniperState;
+    public void sniperStatusChanged(SniperSnapshot sniperSnapshot, String statusText) {
+        this.sniperSnapshot = sniperSnapshot;
         this.statusText = statusText;
         fireTableRowsUpdated(0, 0);
     }
