@@ -11,7 +11,6 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;

@@ -3,11 +3,7 @@ package auctionsniper.endtoend.test;
 import auctionsniper.MainWindow;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JTableCellFixture;
 import org.assertj.swing.fixture.JTableFixture;
-import org.assertj.swing.timing.Condition;
-
-import static org.assertj.swing.timing.Pause.pause;
 
 class AuctionSniperDriver {
 
@@ -20,16 +16,9 @@ class AuctionSniperDriver {
     }
 
 
-    public void showsSniperStatus(String status) {
+    public void showsSniperStatus(String itemId, int lastPrice, int lastBid, String statusText) {
         JTableFixture table = window.table(MainWindow.SNIPERS_TABLE_NAME);
-        JTableCellFixture cell = table.cell(status);
-        pause(new Condition("Waiting to change text") {
-            @Override
-            public boolean test() {
-                return cell != null && cell.value().equals(status);
-            }
-        }, 1000);
-
+        table.requireContents(new String[][] {{itemId, String.valueOf(lastPrice), String.valueOf(lastBid), statusText}});
     }
 
     public void dispose() {

@@ -18,8 +18,10 @@ class ApplicationRunner {
 
     private AuctionSniperDriver driver;
     private MainWindow ui;
+    private String itemId;
 
     public void startBiddingIn(FakeAuctionServer auction) throws InvocationTargetException, InterruptedException {
+        itemId = auction.getItemId();
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
         Thread thread = new Thread("Test Application") {
             @Override
@@ -35,11 +37,11 @@ class ApplicationRunner {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriver(ui);
-        driver.showsSniperStatus(MainWindow.STATUS_JOINING);
+        driver.showsSniperStatus(itemId, 0, 0, MainWindow.STATUS_JOINING);
     }
 
     public void showSniperHasLostAuction() {
-        driver.showsSniperStatus(MainWindow.STATUS_LOST);
+        driver.showsSniperStatus(itemId, 0, 0, MainWindow.STATUS_LOST);
     }
 
     public void stop() {
@@ -48,15 +50,15 @@ class ApplicationRunner {
         }
     }
 
-    public void hasShownSniperIsBidding() {
-        driver.showsSniperStatus(MainWindow.STATUS_BIDDING);
+    public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
+        driver.showsSniperStatus(itemId, lastPrice, lastBid, MainWindow.STATUS_BIDDING);
     }
 
-    public void hasShownSniperIsWinning() {
-
+    public void hasShownSniperIsWinning(int winningBid) {
+        driver.showsSniperStatus(itemId, winningBid, winningBid, MainWindow.STATUS_WINNING);
     }
 
-    public void showsSniperHasWonAuction() {
-
+    public void showsSniperHasWonAuction(int lastPrice) {
+        driver.showsSniperStatus(itemId, lastPrice, lastPrice, MainWindow.STATUS_WON);
     }
 }
