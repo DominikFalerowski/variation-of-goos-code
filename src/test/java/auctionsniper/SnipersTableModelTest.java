@@ -35,7 +35,7 @@ class SnipersTableModelTest {
 
     @Test
     void setsSniperValuesInColumns() {
-        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666), MainWindow.STATUS_BIDDING);
+        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666, SniperState.BIDDING), MainWindow.STATUS_BIDDING);
 
         verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0)));
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");

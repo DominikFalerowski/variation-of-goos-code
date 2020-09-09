@@ -6,7 +6,7 @@ import static auctionsniper.MainWindow.STATUS_JOINING;
 
 class SnipersTableModel extends AbstractTableModel {
 
-    private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0);
+    private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.BIDDING);
     private String statusText = STATUS_JOINING;
     private SniperSnapshot sniperSnapshot = STARTING_UP;
 
