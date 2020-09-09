@@ -27,4 +27,17 @@ class SnipersTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         return statusText;
     }
+
+    public void sniperStatusChanged(SniperState sniperState, String statusText) {
+
+    }
+
+    public enum Column {
+        ITEM_IDENTIFIER,
+        LAST_PRICE,
+        LAST_BID,
+        SNIPER_STATUS;
+
+        public static Column at(int offset) { return values()[offset]; }
+    }
 }
