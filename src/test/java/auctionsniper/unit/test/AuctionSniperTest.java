@@ -1,9 +1,6 @@
 package auctionsniper.unit.test;
 
-import auctionsniper.Auction;
-import auctionsniper.AuctionSniper;
-import auctionsniper.SniperListener;
-import auctionsniper.SniperSnapshot;
+import auctionsniper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +14,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AuctionSniperTest {
 
+    private static final String ITEM_ID = "any";
+
     @Mock
     SniperListener sniperListener;
 
@@ -27,14 +26,14 @@ class AuctionSniperTest {
 
     @BeforeEach
     void setUp() {
-        sniper = new AuctionSniper(auction, sniperListener, "any");
+        sniper = new AuctionSniper(auction, sniperListener, ITEM_ID);
     }
 
     @Test
     void reportsLoseIfAuctionClosesImmediately() {
         sniper.auctionClosed();
 
-        verify(sniperListener, times(1)).sniperLost();
+        verify(sniperListener, times(1)).sniperStateChanged(new SniperSnapshot(ITEM_ID, 0, 0, SniperState.LOST));
     }
 
     @Test
@@ -42,7 +41,7 @@ class AuctionSniperTest {
         sniper.currentPrice(123, 45, FromOtherBidder);
         sniper.auctionClosed();
 
-        verify(sniperListener, atLeastOnce()).sniperLost();
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, 123, 168, SniperState.LOST));
     }
 
     @Test
@@ -50,7 +49,7 @@ class AuctionSniperTest {
         sniper.currentPrice(123, 45, FromSniper);
         sniper.auctionClosed();
 
-        verify(sniperListener, atLeastOnce()).sniperWinning();
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, 123, 0, SniperState.WINNING));
     }
 
     @Test
@@ -62,6 +61,14 @@ class AuctionSniperTest {
         sniper.currentPrice(price, increment, FromOtherBidder);
 
         verify(auction, times(1)).bid(bid);
-        verify(sniperListener, atLeastOnce()).sniperBidding(any(SniperSnapshot.class));
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, 1001, 1026, SniperState.BIDDING));
+    }
+
+    @Test
+    void reportsIsWinningWhenCurrentPriceComesFromSniper() {
+        sniper.currentPrice(123, 12, FromOtherBidder);
+        sniper.currentPrice(135, 12, FromSniper);
+
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, 135, 135, SniperState.WINNING));
     }
 }

@@ -74,7 +74,7 @@ class FakeAuctionServer {
 
     void receivesAMessageMatching(String sniperId, String body) throws InterruptedException {
         messageListener.receivesAMessage(body);
-        assertThat(currentChat.getXmppAddressOfChatPartner().toString()).hasToString(sniperId);
+        assertThat(currentChat.getXmppAddressOfChatPartner().toString() + "/" + AUCTION_RESOURCE).hasToString(sniperId);
     }
 
     private static class SingleMessageListener implements IncomingChatMessageListener {

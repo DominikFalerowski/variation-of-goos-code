@@ -55,7 +55,7 @@ class AuctionMessageTranslatorTest {
     @Test
     void notifiesBidDetailsWhenCurrentPriceMessageReceivedFromSniper() {
         Message message = new Message();
-        message.setBody("SQLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: " + SNIPER_ID +";");
+        message.setBody("SQLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: " + SNIPER_ID + ";");
 
         translator.newIncomingMessage(UNUSED_ENTITY, message, UNUSED_CHAT);
 

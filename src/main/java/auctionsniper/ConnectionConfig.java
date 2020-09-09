@@ -2,10 +2,7 @@ package auctionsniper;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
-
-import static auctionsniper.Main.AUCTION_RESOURCE;
 
 public class ConnectionConfig {
 
@@ -19,7 +16,6 @@ public class ConnectionConfig {
                 .setPort(5222)
                 .setXmppDomain("desktop-eut9frn.mshome.net")
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-                .setResource(Resourcepart.from(AUCTION_RESOURCE))
                 .setSendPresence(true)
                 .build();
     }
