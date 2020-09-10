@@ -8,7 +8,10 @@ import auctionsniper.SnipersTableModel;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
+import static auctionsniper.SniperState.JOINING;
+import static auctionsniper.SnipersTableModel.textFor;
 import static auctionsniper.endtoend.test.FakeAuctionServer.AUCTION_RESOURCE;
 import static auctionsniper.endtoend.test.FakeAuctionServer.XMPP_HOSTNAME;
 
@@ -21,16 +24,14 @@ class ApplicationRunner {
 
     private AuctionSniperDriver driver;
     private MainWindow ui;
-    private String itemId;
 
-    public void startBiddingIn(FakeAuctionServer auction) throws InvocationTargetException, InterruptedException {
-        itemId = auction.getItemId();
+    public void startBiddingIn(FakeAuctionServer ...auctions) throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow(new SnipersTableModel()));
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
                 try {
-                    Main.main(ui, XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.getItemId());
+                    Main.main(ui, arguments(auctions));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -41,6 +42,7 @@ class ApplicationRunner {
         thread.start();
         driver = new AuctionSniperDriver(ui);
         driver.hasColumnTitles();
+        Arrays.stream(auctions).forEach(auction -> driver.showsSniperStatus(auction.getItemId(), 0, 0, textFor(JOINING)));
     }
 
     public void stop() {
@@ -50,18 +52,30 @@ class ApplicationRunner {
     }
 
     public void hasShownSniperIsBidding(FakeAuctionServer auction, int lastPrice, int lastBid) {
-        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid, SnipersTableModel.textFor(SniperState.BIDDING));
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid, textFor(SniperState.BIDDING));
     }
 
-    public void hasShownSniperIsWinning(int winningBid) {
-        driver.showsSniperStatus(itemId, winningBid, winningBid, SnipersTableModel.textFor(SniperState.WINNING));
+    public void hasShownSniperIsWinning(FakeAuctionServer auction, int winningBid) {
+        driver.showsSniperStatus(auction.getItemId(), winningBid, winningBid, textFor(SniperState.WINNING));
     }
 
-    public void showsSniperHasWonAuction(int lastPrice) {
-        driver.showsSniperStatus(itemId, lastPrice, lastPrice, SnipersTableModel.textFor(SniperState.WON));
+    public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice) {
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastPrice, textFor(SniperState.WON));
     }
 
-    public void showSniperHasLostAuction(int lastPrice, int lastBid) {
-        driver.showsSniperStatus(itemId, lastPrice, lastBid, SnipersTableModel.textFor(SniperState.LOST));
+    public void showSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid, textFor(SniperState.LOST));
+    }
+
+    protected static String[] arguments(FakeAuctionServer ... auctions) {
+        String[] arguments = new String[auctions.length + 3];
+        arguments[0] = XMPP_HOSTNAME;
+        arguments[1] = SNIPER_ID;
+        arguments[2] = SNIPER_PASSWORD;
+        for (int i = 0; i < auctions.length; i++) {
+            arguments[i + 3] = auctions[i].getItemId();
+        }
+
+        return arguments;
     }
 }
