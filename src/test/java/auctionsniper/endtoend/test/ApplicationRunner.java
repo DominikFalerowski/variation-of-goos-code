@@ -40,6 +40,7 @@ class ApplicationRunner {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriver(ui);
+        driver.hasColumnTitles();
     }
 
     public void stop() {
