@@ -38,11 +38,14 @@ public class Main {
 
     public static void main(MainWindow ui, String... args) throws InterruptedException, IOException, SmackException, XMPPException {
         Main main = new Main(ui);
-        main.joinAuction(connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]), args[ARG_ITEM_ID]);
+        AbstractXMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
+        main.disconnectWhenUICloses(connection);
+        for (int i = 3; i < args.length; i++) {
+            main.joinAuction(connection, args[i]);
+        }
     }
 
     private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException {
-        disconnectWhenUICloses(connection);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
         Auction auction = new XMPPAuction(chat);
