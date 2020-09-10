@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.times;
@@ -42,7 +44,11 @@ class SnipersTableModelTest {
         assertColumnEquals(Column.LAST_PRICE, 555);
         assertColumnEquals(Column.LAST_BID, 666);
         assertColumnEquals(Column.SNIPER_STATUS, SnipersTableModel.textFor(SniperState.BIDDING));
+    }
 
+    @Test
+    void setsUpColumnHeadings() {
+        Arrays.stream(Column.values()).forEach(column -> assertThat(column.getName()).isEqualTo(model.getColumnName(column.ordinal())));
     }
 
     private void assertColumnEquals(Column column, Object expected) {
