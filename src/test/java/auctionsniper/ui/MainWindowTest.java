@@ -1,5 +1,6 @@
-package auctionsniper;
+package auctionsniper.ui;
 
+import auctionsniper.UserRequestListener;
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
 import org.assertj.swing.fixture.FrameFixture;

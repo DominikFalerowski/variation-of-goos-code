@@ -1,5 +1,9 @@
-package auctionsniper;
+package auctionsniper.ui;
 
+import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperState;
+import auctionsniper.ui.Column;
+import auctionsniper.ui.SnipersTableModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +14,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.util.Arrays;
 
-import static auctionsniper.SnipersTableModel.textFor;
+import static auctionsniper.ui.SnipersTableModel.textFor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.mockito.ArgumentMatchers.refEq;
