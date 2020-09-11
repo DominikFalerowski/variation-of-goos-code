@@ -25,24 +25,10 @@ class ApplicationRunner {
     private MainWindow ui;
 
     public void startBiddingIn(FakeAuctionServer... auctions) throws InvocationTargetException, InterruptedException {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(new SnipersTableModel()));
-        Thread thread = new Thread("Test Application") {
-            @Override
-            public void run() {
-                try {
-                    Main.main(ui, arguments(auctions));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        thread.setDaemon(true);
-        thread.start();
-        driver = new AuctionSniperDriver(ui);
-        driver.hasColumnTitles();
+        startSniper(auctions);
         for (int i = 0; i < auctions.length; i++) {
             FakeAuctionServer auction = auctions[i];
+            driver.startBiddingFor(auction.getItemId());
             driver.showsSniperStatus(auction.getItemId(), 0, 0, textFor(JOINING), i);
         }
     }
@@ -79,5 +65,24 @@ class ApplicationRunner {
         }
 
         return arguments;
+    }
+
+    private void startSniper(FakeAuctionServer... auctions) throws InvocationTargetException, InterruptedException {
+        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(new SnipersTableModel()));
+        Thread thread = new Thread("Test Application") {
+            @Override
+            public void run() {
+                try {
+                    Main.main(ui, arguments(auctions));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        thread.setDaemon(true);
+        thread.start();
+        driver = new AuctionSniperDriver(ui);
+        driver.hasColumnTitles();
     }
 }

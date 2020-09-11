@@ -12,7 +12,7 @@ import static org.assertj.swing.data.TableCell.row;
 import static org.assertj.swing.edt.GuiActionRunner.execute;
 import static org.assertj.swing.timing.Pause.pause;
 
-class AuctionSniperDriver {
+public class AuctionSniperDriver {
 
     private final FrameFixture window;
     private final JTableFixture table;
@@ -55,5 +55,10 @@ class AuctionSniperDriver {
 
     private boolean assertEqualsTableCells(JTableCellFixture tableCell, String valueToCompare) {
         return tableCell != null && tableCell.value().equals(valueToCompare);
+    }
+
+    public void startBiddingFor(String itemId) {
+        window.textBox(MainWindow.NEW_ITEM_ID_NAME).deleteText().enterText(itemId);
+        window.button(MainWindow.JOIN_BUTTON_NAME).click();
     }
 }
