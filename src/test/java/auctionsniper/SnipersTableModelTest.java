@@ -6,12 +6,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.util.Arrays;
 
 import static auctionsniper.SnipersTableModel.textFor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class SnipersTableModelTest {
@@ -40,7 +44,7 @@ class SnipersTableModelTest {
         model.addSniper(joining);
         model.sniperStateChanged(bidding);
 
-//        verify(listener, times(1)).tableChanged(eq(new TableModelEvent(model, 0, 0, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT)));
+        verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0, 0, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT)));
         assertRowMatchesSnapshot(0, bidding);
     }
 
@@ -55,7 +59,7 @@ class SnipersTableModelTest {
 
         model.addSniper(joining);
 
-//        verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0, 0, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT)));
+        verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0, 0, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT)));
         assertThat(model.getRowCount()).isEqualTo(1);
         assertRowMatchesSnapshot(0, joining);
     }
