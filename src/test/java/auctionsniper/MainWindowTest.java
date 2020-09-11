@@ -1,5 +1,7 @@
 package auctionsniper;
 
+import auctionsniper.ui.MainWindow;
+import auctionsniper.ui.SnipersTableModel;
 import org.assertj.swing.fixture.FrameFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,23 +20,26 @@ import static org.mockito.Mockito.verify;
 class MainWindowTest {
 
     private final SnipersTableModel snipersTableModel = new SnipersTableModel();
-    private final MainWindow mainWindow = new MainWindow(snipersTableModel);
-    private final FrameFixture window = new FrameFixture(mainWindow);
+    private MainWindow mainWindow;
+    private FrameFixture window;
 
     @Mock
     private UserRequestListener userRequestListener;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvocationTargetException, InterruptedException {
+        SwingUtilities.invokeAndWait(() -> {
+            mainWindow = new MainWindow(snipersTableModel);
+            window = new FrameFixture(mainWindow);
+        });
         mainWindow.addUserRequestListener(userRequestListener);
     }
 
     @Test
-    void makesUserRequestWhenJoinButtonClicked() throws InvocationTargetException, InterruptedException {
+    void makesUserRequestWhenJoinButtonClicked() {
         window.textBox(MainWindow.NEW_ITEM_ID_NAME).deleteText().enterText("an item id");
         window.button(MainWindow.JOIN_BUTTON_NAME).click();
-        SwingUtilities.invokeAndWait(() -> {
-            verify(userRequestListener, times(1)).joinAuction("an item id");
-        });
+
+        verify(userRequestListener, times(1)).joinAuction("an item id");
     }
 }
