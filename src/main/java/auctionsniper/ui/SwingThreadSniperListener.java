@@ -1,12 +1,15 @@
-package auctionsniper;
+package auctionsniper.ui;
+
+import auctionsniper.SniperListener;
+import auctionsniper.SniperSnapshot;
 
 import javax.swing.*;
 
-class SwingThreadSniperListener implements SniperListener {
+public class SwingThreadSniperListener implements SniperListener {
 
     private final SnipersTableModel snipers;
 
-    SwingThreadSniperListener(SnipersTableModel snipers) {
+    public SwingThreadSniperListener(SnipersTableModel snipers) {
         this.snipers = snipers;
     }
 

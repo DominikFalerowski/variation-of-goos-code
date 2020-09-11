@@ -2,15 +2,15 @@ package auctionsniper.endtoend.test;
 
 
 import auctionsniper.Main;
-import auctionsniper.MainWindow;
+import auctionsniper.ui.MainWindow;
 import auctionsniper.SniperState;
-import auctionsniper.SnipersTableModel;
+import auctionsniper.ui.SnipersTableModel;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 
 import static auctionsniper.SniperState.JOINING;
-import static auctionsniper.SnipersTableModel.textFor;
+import static auctionsniper.ui.SnipersTableModel.textFor;
 import static auctionsniper.endtoend.test.FakeAuctionServer.AUCTION_RESOURCE;
 import static auctionsniper.endtoend.test.FakeAuctionServer.XMPP_HOSTNAME;
 

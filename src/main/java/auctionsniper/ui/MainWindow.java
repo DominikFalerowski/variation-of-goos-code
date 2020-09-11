@@ -1,4 +1,6 @@
-package auctionsniper;
+package auctionsniper.ui;
+
+import auctionsniper.UserRequestListener;
 
 import javax.swing.*;
 import java.awt.*;

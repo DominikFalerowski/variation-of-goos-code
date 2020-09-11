@@ -1,6 +1,8 @@
 package auctionsniper;
 
 
+import auctionsniper.ui.MainWindow;
+import auctionsniper.ui.SwingThreadSniperListener;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;

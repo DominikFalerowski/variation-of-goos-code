@@ -1,7 +1,7 @@
 package auctionsniper.endtoend.test;
 
-import auctionsniper.Column;
-import auctionsniper.MainWindow;
+import auctionsniper.ui.Column;
+import auctionsniper.ui.MainWindow;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JTableCellFixture;

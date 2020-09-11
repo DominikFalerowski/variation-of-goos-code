@@ -1,4 +1,7 @@
-package auctionsniper;
+package auctionsniper.ui;
+
+import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperState;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
