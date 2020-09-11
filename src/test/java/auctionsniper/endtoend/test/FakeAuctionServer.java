@@ -32,7 +32,7 @@ class FakeAuctionServer {
     private final String itemId;
     private final AbstractXMPPConnection connection;
     private final SingleMessageListener messageListener = new SingleMessageListener();
-    private static Chat currentChat;
+    private Chat currentChat;
 
     public FakeAuctionServer(String itemId) throws XmppStringprepException {
         this.itemId = itemId;
@@ -77,7 +77,7 @@ class FakeAuctionServer {
         assertThat(currentChat.getXmppAddressOfChatPartner().toString() + "/" + AUCTION_RESOURCE).hasToString(sniperId);
     }
 
-    private static class SingleMessageListener implements IncomingChatMessageListener {
+    private class SingleMessageListener implements IncomingChatMessageListener {
 
         private final ArrayBlockingQueue<Message> messages = new ArrayBlockingQueue<>(1);
 

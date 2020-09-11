@@ -7,6 +7,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
+import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
@@ -49,9 +50,10 @@ public class Main {
     private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException {
         safelyAddItemToModel(itemId);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
-        Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
+        EntityBareJid entityAuctionId = JidCreate.entityBareFrom(auctionId(itemId, connection));
+        Chat chat = chatManager.chatWith(entityAuctionId);
         Auction auction = new XMPPAuction(chat);
-        chatManager.addIncomingListener(new AuctionMessageTranslator(connection.getUser().toString(), new AuctionSniper(auction, new SwingThreadSniperListener(ui.getSnipers()), itemId)));
+        chatManager.addIncomingListener(new AuctionMessageTranslator(connection.getUser().toString(), new AuctionSniper(auction, new SwingThreadSniperListener(ui.getSnipers()), itemId), entityAuctionId));
         auction.join();
     }
 
