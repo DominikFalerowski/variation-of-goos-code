@@ -8,7 +8,6 @@ import auctionsniper.SnipersTableModel;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 
 import static auctionsniper.SniperState.JOINING;
 import static auctionsniper.SnipersTableModel.textFor;
@@ -25,7 +24,7 @@ class ApplicationRunner {
     private AuctionSniperDriver driver;
     private MainWindow ui;
 
-    public void startBiddingIn(FakeAuctionServer ...auctions) throws InvocationTargetException, InterruptedException {
+    public void startBiddingIn(FakeAuctionServer... auctions) throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow(new SnipersTableModel()));
         Thread thread = new Thread("Test Application") {
             @Override
@@ -70,7 +69,7 @@ class ApplicationRunner {
         driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid, textFor(SniperState.LOST), rowIndex);
     }
 
-    protected static String[] arguments(FakeAuctionServer ... auctions) {
+    protected static String[] arguments(FakeAuctionServer... auctions) {
         String[] arguments = new String[auctions.length + 3];
         arguments[0] = XMPP_HOSTNAME;
         arguments[1] = SNIPER_ID;

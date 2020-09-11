@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.swing.event.TableModelListener;
-
 import java.util.Arrays;
 
 import static auctionsniper.SnipersTableModel.textFor;

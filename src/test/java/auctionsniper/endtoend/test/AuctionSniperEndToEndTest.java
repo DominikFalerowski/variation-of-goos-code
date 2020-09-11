@@ -37,7 +37,7 @@ class AuctionSniperEndToEndTest {
         application.hasShownSniperIsBidding(auction, 1000, 1098, 0);
         auction.hasReceivedBid(1098, ApplicationRunner.SNIPER_XMPP_ID);
         auction.announceClosed();
-        application.showSniperHasLostAuction(auction,1000, 1098, 0);
+        application.showSniperHasLostAuction(auction, 1000, 1098, 0);
     }
 
     @Test
@@ -49,9 +49,9 @@ class AuctionSniperEndToEndTest {
         application.hasShownSniperIsBidding(auction, 1000, 1098, 0); //last price, last bid
         auction.hasReceivedBid(1098, ApplicationRunner.SNIPER_XMPP_ID);
         auction.reportPrice(1098, 97, ApplicationRunner.SNIPER_XMPP_ID);
-        application.hasShownSniperIsWinning(auction,1098, 0); //winning bid
+        application.hasShownSniperIsWinning(auction, 1098, 0); //winning bid
         auction.announceClosed();
-        application.showsSniperHasWonAuction(auction,1098, 0); //last price
+        application.showsSniperHasWonAuction(auction, 1098, 0); //last price
     }
 
     @Test
