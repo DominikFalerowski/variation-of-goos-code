@@ -7,6 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.swing.*;
+
+import java.lang.reflect.InvocationTargetException;
+
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -26,10 +30,11 @@ class MainWindowTest {
     }
 
     @Test
-    void makesUserRequestWhenJoinButtonClicked() {
+    void makesUserRequestWhenJoinButtonClicked() throws InvocationTargetException, InterruptedException {
         window.textBox(MainWindow.NEW_ITEM_ID_NAME).deleteText().enterText("an item id");
         window.button(MainWindow.JOIN_BUTTON_NAME).click();
-
-        verify(userRequestListener, times(1)).joinAuction("an item id");
+        SwingUtilities.invokeAndWait(() -> {
+            verify(userRequestListener, times(1)).joinAuction("an item id");
+        });
     }
 }
