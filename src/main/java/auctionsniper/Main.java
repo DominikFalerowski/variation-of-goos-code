@@ -11,9 +11,11 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import static auctionsniper.ConnectionConfig.configuration;
 import static java.lang.String.format;
@@ -25,7 +27,6 @@ public class Main {
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
     private static final int ARG_PASSWORD = 2;
-    private static final int ARG_ITEM_ID = 3;
     private final MainWindow ui;
 
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -46,11 +47,21 @@ public class Main {
     }
 
     private void joinAuction(AbstractXMPPConnection connection, String itemId) throws XmppStringprepException {
+        safelyAddItemToModel(itemId);
         ChatManager chatManager = ChatManager.getInstanceFor(connection);
         Chat chat = chatManager.chatWith(JidCreate.entityBareFrom(auctionId(itemId, connection)));
         Auction auction = new XMPPAuction(chat);
         chatManager.addIncomingListener(new AuctionMessageTranslator(connection.getUser().toString(), new AuctionSniper(auction, new SwingThreadSniperListener(ui.getSnipers()), itemId)));
         auction.join();
+    }
+
+    private void safelyAddItemToModel(String itemId) {
+        try {
+            SwingUtilities.invokeAndWait(() -> ui.getSnipers().addSniper(SniperSnapshot.joining(itemId)));
+        } catch (InterruptedException | InvocationTargetException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void disconnectWhenUICloses(AbstractXMPPConnection connection) {

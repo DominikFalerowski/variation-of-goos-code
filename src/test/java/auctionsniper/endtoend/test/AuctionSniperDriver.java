@@ -25,11 +25,11 @@ class AuctionSniperDriver {
     }
 
 
-    public void showsSniperStatus(String itemId, int lastPrice, int lastBid, String statusText) {
-        JTableCellFixture itemIdCell = table.cell(row(0).column(Column.ITEM_IDENTIFIER.ordinal()));
-        JTableCellFixture lastPriceCell = table.cell(row(0).column(Column.LAST_PRICE.ordinal()));
-        JTableCellFixture lastBidCell = table.cell(row(0).column(Column.LAST_BID.ordinal()));
-        JTableCellFixture statusTextCell = table.cell(row(0).column(Column.SNIPER_STATUS.ordinal()));
+    public void showsSniperStatus(String itemId, int lastPrice, int lastBid, String statusText, int rowIndex) {
+        JTableCellFixture itemIdCell = table.cell(row(rowIndex).column(Column.ITEM_IDENTIFIER.ordinal()));
+        JTableCellFixture lastPriceCell = table.cell(row(rowIndex).column(Column.LAST_PRICE.ordinal()));
+        JTableCellFixture lastBidCell = table.cell(row(rowIndex).column(Column.LAST_BID.ordinal()));
+        JTableCellFixture statusTextCell = table.cell(row(rowIndex).column(Column.SNIPER_STATUS.ordinal()));
 
         pause(new Condition("Waiting for row to change") {
             @Override
@@ -39,7 +39,7 @@ class AuctionSniperDriver {
                         assertEqualsTableCells(lastBidCell, String.valueOf(lastBid)) &&
                         assertEqualsTableCells(statusTextCell, statusText));
             }
-        }, 5000);
+        }, 1000);
     }
 
     public void dispose() {

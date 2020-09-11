@@ -1,5 +1,7 @@
 package auctionsniper;
 
+import java.util.Objects;
+
 public class AuctionSniper implements AuctionEventListener {
 
     private final Auction auction;
@@ -35,5 +37,20 @@ public class AuctionSniper implements AuctionEventListener {
 
     private void notifyChange() {
         sniperListener.sniperStateChanged(sniperSnapshot);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuctionSniper that = (AuctionSniper) o;
+        return Objects.equals(auction, that.auction) &&
+                Objects.equals(sniperListener, that.sniperListener) &&
+                Objects.equals(sniperSnapshot, that.sniperSnapshot);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(auction, sniperListener, sniperSnapshot);
     }
 }

@@ -47,6 +47,10 @@ public class SniperSnapshot {
         return sniperState;
     }
 
+    public boolean isForSameItemAs(SniperSnapshot sniperSnapshot) {
+        return itemId.equals(sniperSnapshot.getItemId());
+    }
+
     @Override
     public String toString() {
         return "SniperSnapshot{" +

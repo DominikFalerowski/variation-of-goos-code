@@ -12,7 +12,7 @@ class SwingThreadSniperListener implements SniperListener {
 
     @Override
     public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
-        SwingUtilities.invokeLater(() -> snipers.sniperStatusChanged(sniperSnapshot));
+        SwingUtilities.invokeLater(() -> snipers.sniperStateChanged(sniperSnapshot));
     }
 
 }
