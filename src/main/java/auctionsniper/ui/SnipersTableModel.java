@@ -32,6 +32,10 @@ public class SnipersTableModel extends AbstractTableModel {
         return Column.at(column).getName();
     }
 
+    public static String textFor(SniperState state) {
+        return STATUS_TEXT[state.ordinal()];
+    }
+
     public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
         for (int row = 0; row < snapshots.size(); row++) {
             if (sniperSnapshot.isForSameItemAs(snapshots.get(row))) {
@@ -41,10 +45,6 @@ public class SnipersTableModel extends AbstractTableModel {
             }
         }
         throw new IllegalArgumentException("Cannot find match for " + sniperSnapshot);
-    }
-
-    public static String textFor(SniperState state) {
-        return STATUS_TEXT[state.ordinal()];
     }
 
     public void addSniper(SniperSnapshot sniperSnapshot) {
