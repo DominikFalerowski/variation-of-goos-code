@@ -20,6 +20,9 @@ class XMPPAuctionHouseTest {
     private final FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");
     private XMPPAuctionHouse auctionHouse;
 
+    XMPPAuctionHouseTest() throws XmppStringprepException {
+    }
+
     @BeforeEach
     void setUp() throws InterruptedException, IOException, SmackException, XMPPException {
         auctionHouse = XMPPAuctionHouse.connect(FakeAuctionServer.XMPP_HOSTNAME, ApplicationRunner.SNIPER_ID, ApplicationRunner.SNIPER_PASSWORD);
@@ -32,9 +35,6 @@ class XMPPAuctionHouseTest {
             auctionHouse.disconnect();
         }
         auctionServer.stop();
-    }
-
-    XMPPAuctionHouseTest() throws XmppStringprepException {
     }
 
     @Test

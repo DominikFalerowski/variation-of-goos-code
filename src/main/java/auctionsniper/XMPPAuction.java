@@ -14,13 +14,13 @@ import static java.lang.String.format;
 
 public class XMPPAuction implements Auction {
 
+    public static final String ITEM_ID_AS_LOGIN = "auction-%s";
+    public static final String AUCTION_RESOURCE = "Auction";
+    public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
     private final Chat chat;
     private final ChatManager chatManager;
     private final AbstractXMPPConnection connection;
     private final EntityBareJid entityAuctionId;
-    public static final String ITEM_ID_AS_LOGIN = "auction-%s";
-    public static final String AUCTION_RESOURCE = "Auction";
-    public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
     public XMPPAuction(AbstractXMPPConnection connection, String itemId) {
         this.connection = connection;

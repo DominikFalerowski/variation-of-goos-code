@@ -10,6 +10,18 @@ class AuctionEvent {
 
     private final Map<String, String> fields = new HashMap<>();
 
+    static AuctionEvent from(String messageBody) {
+        AuctionEvent event = new AuctionEvent();
+        for (String field : fieldsIn(messageBody)) {
+            event.addField(field);
+        }
+
+        return event;
+    }
+
+    static String[] fieldsIn(String messageBody) {
+        return messageBody.split(";");
+    }
 
     public int currentPrice() {
         return getInt("CurrentPrice");
@@ -25,19 +37,6 @@ class AuctionEvent {
 
     public AuctionEventListener.PriceSource isFrom(String sniperId) {
         return sniperId.equals(bidder()) ? FROM_SNIPER : FROM_OTHER_BIDDER;
-    }
-
-    static AuctionEvent from(String messageBody) {
-        AuctionEvent event = new AuctionEvent();
-        for (String field : fieldsIn(messageBody)) {
-            event.addField(field);
-        }
-
-        return event;
-    }
-
-    static String[] fieldsIn(String messageBody) {
-        return messageBody.split(";");
     }
 
     private String get(String fieldName) {

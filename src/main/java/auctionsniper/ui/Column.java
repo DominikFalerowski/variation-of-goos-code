@@ -34,11 +34,11 @@ public enum Column {
         this.name = name;
     }
 
-    public abstract Object valueIn(SniperSnapshot sniperSnapshot);
-
     public static Column at(int offset) {
         return values()[offset];
     }
+
+    public abstract Object valueIn(SniperSnapshot sniperSnapshot);
 
     public String getName() {
         return name;

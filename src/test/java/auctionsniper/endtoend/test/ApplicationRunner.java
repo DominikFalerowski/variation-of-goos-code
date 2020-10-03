@@ -3,11 +3,6 @@ package auctionsniper.endtoend.test;
 
 import auctionsniper.Main;
 import auctionsniper.SniperState;
-import auctionsniper.ui.MainWindow;
-import auctionsniper.ui.SnipersTableModel;
-
-import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
 
 import static auctionsniper.SniperState.JOINING;
 import static auctionsniper.endtoend.test.FakeAuctionServer.AUCTION_RESOURCE;
@@ -22,9 +17,20 @@ public class ApplicationRunner {
     public static final String SNIPER_XMPP_ID = SNIPER_ID + "@" + XMPP_HOSTNAME + "/" + AUCTION_RESOURCE;
 
     private AuctionSniperDriver driver;
-    private MainWindow ui;
 
-    public void startBiddingIn(FakeAuctionServer... auctions) throws InvocationTargetException, InterruptedException {
+    protected static String[] arguments(FakeAuctionServer... auctions) {
+        String[] arguments = new String[auctions.length + 3];
+        arguments[0] = XMPP_HOSTNAME;
+        arguments[1] = SNIPER_ID;
+        arguments[2] = SNIPER_PASSWORD;
+        for (int i = 0; i < auctions.length; i++) {
+            arguments[i + 3] = auctions[i].getItemId();
+        }
+
+        return arguments;
+    }
+
+    public void startBiddingIn(FakeAuctionServer... auctions) {
         startSniper(auctions);
         for (int i = 0; i < auctions.length; i++) {
             FakeAuctionServer auction = auctions[i];
@@ -55,25 +61,12 @@ public class ApplicationRunner {
         driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid, textFor(SniperState.LOST), rowIndex);
     }
 
-    protected static String[] arguments(FakeAuctionServer... auctions) {
-        String[] arguments = new String[auctions.length + 3];
-        arguments[0] = XMPP_HOSTNAME;
-        arguments[1] = SNIPER_ID;
-        arguments[2] = SNIPER_PASSWORD;
-        for (int i = 0; i < auctions.length; i++) {
-            arguments[i + 3] = auctions[i].getItemId();
-        }
-
-        return arguments;
-    }
-
-    private void startSniper(FakeAuctionServer... auctions) throws InvocationTargetException, InterruptedException {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(new SnipersTableModel()));
+    private void startSniper(FakeAuctionServer... auctions) {
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
                 try {
-                    Main.main(ui, arguments(auctions));
+                    Main.main(arguments(auctions));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -82,7 +75,7 @@ public class ApplicationRunner {
 
         thread.setDaemon(true);
         thread.start();
-        driver = new AuctionSniperDriver(ui);
+        driver = new AuctionSniperDriver();
         driver.hasColumnTitles();
     }
 }

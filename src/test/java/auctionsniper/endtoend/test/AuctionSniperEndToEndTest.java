@@ -1,6 +1,7 @@
 package auctionsniper.endtoend.test;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.jxmpp.stringprep.XmppStringprepException;
 
@@ -8,18 +9,23 @@ import static auctionsniper.endtoend.test.ApplicationRunner.SNIPER_XMPP_ID;
 
 class AuctionSniperEndToEndTest {
 
-    private final FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");
-    private final FakeAuctionServer auctionServer2 = new FakeAuctionServer("item-65432");
-    private final ApplicationRunner application = new ApplicationRunner();
+    private FakeAuctionServer auctionServer;
+    private FakeAuctionServer auctionServer2;
+    private ApplicationRunner application;
 
 
-    AuctionSniperEndToEndTest() throws XmppStringprepException {
+    @BeforeEach
+    void setUp() throws XmppStringprepException {
+        auctionServer = new FakeAuctionServer("item-54321");
+        auctionServer2 = new FakeAuctionServer("item-65432");
+        application = new ApplicationRunner();
     }
 
     @AfterEach
     void tearDown() {
-        auctionServer.stop();
         application.stop();
+        auctionServer.stop();
+        auctionServer2.stop();
     }
 
     @Test

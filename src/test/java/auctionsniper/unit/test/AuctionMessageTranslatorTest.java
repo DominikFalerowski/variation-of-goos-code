@@ -21,11 +21,9 @@ import static org.mockito.Mockito.verify;
 class AuctionMessageTranslatorTest {
 
     private static final String SNIPER_ID = "SNIPER ID";
-
+    private static final Chat UNUSED_CHAT = null;
     @Mock
     AuctionEventListener listener;
-
-    private static final Chat UNUSED_CHAT = null;
     private EntityBareJid entityBareJid;
     private AuctionMessageTranslator translator;
 

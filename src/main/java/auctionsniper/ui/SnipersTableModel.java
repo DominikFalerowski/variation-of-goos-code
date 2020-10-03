@@ -6,11 +6,15 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SnipersTableModel extends AbstractTableModel implements SniperListener, SniperCollector {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener, PortfolioListener {
 
     private static final String[] STATUS_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won"};
     private final List<SniperSnapshot> snapshots = new ArrayList<>();
     private final List<AuctionSniper> snipers = new ArrayList<>();
+
+    public static String textFor(SniperState state) {
+        return STATUS_TEXT[state.ordinal()];
+    }
 
     @Override
     public int getRowCount() {
@@ -32,10 +36,6 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
         return Column.at(column).getName();
     }
 
-    public static String textFor(SniperState state) {
-        return STATUS_TEXT[state.ordinal()];
-    }
-
     public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
         for (int row = 0; row < snapshots.size(); row++) {
             if (sniperSnapshot.isForSameItemAs(snapshots.get(row))) {
@@ -47,9 +47,9 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
         throw new IllegalArgumentException("Cannot find match for " + sniperSnapshot);
     }
 
+
     @Override
-    public void addSniper(AuctionSniper sniper) {
-        snipers.add(sniper);
+    public void sniperAdded(AuctionSniper sniper) {
         addSniperSnapshot(sniper.getSnapshot());
         sniper.addSniperListener(new SwingThreadSniperListener(this));
     }

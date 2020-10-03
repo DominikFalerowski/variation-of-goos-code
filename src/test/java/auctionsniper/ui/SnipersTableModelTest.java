@@ -1,6 +1,9 @@
 package auctionsniper.ui;
 
-import auctionsniper.*;
+import auctionsniper.Auction;
+import auctionsniper.AuctionSniper;
+import auctionsniper.SniperSnapshot;
+import auctionsniper.SniperState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +45,7 @@ class SnipersTableModelTest {
         SniperSnapshot joining = auctionSniper.getSnapshot();
         SniperSnapshot bidding = joining.bidding(555, 666);
 
-        model.addSniper(auctionSniper);
+        model.sniperAdded(auctionSniper);
         model.sniperStateChanged(bidding);
 
         verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0, 0, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT)));
@@ -59,7 +62,7 @@ class SnipersTableModelTest {
         AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), "item123");
         SniperSnapshot joining = auctionSniper.getSnapshot();
 
-        model.addSniper(auctionSniper);
+        model.sniperAdded(auctionSniper);
 
         verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0, 0, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT)));
         assertThat(model.getRowCount()).isEqualTo(1);
@@ -70,8 +73,8 @@ class SnipersTableModelTest {
     void holdsSnipersInAdditionOrder() {
         AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), "item 0");
         AuctionSniper auctionSniper2 = new AuctionSniper(mock(Auction.class), "item 1");
-        model.addSniper(auctionSniper);
-        model.addSniper(auctionSniper2);
+        model.sniperAdded(auctionSniper);
+        model.sniperAdded(auctionSniper2);
 
         assertThat(cellValue(0, Column.ITEM_IDENTIFIER)).isEqualTo("item 0");
         assertThat(cellValue(1, Column.ITEM_IDENTIFIER)).isEqualTo("item 1");

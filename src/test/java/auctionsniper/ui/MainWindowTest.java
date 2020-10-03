@@ -1,5 +1,6 @@
 package auctionsniper.ui;
 
+import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 import org.assertj.swing.fixture.FrameFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class MainWindowTest {
 
-    private final SnipersTableModel snipersTableModel = new SnipersTableModel();
+    private final SniperPortfolio sniperPortfolio = new SniperPortfolio();
     private MainWindow mainWindow;
     private FrameFixture window;
 
@@ -27,7 +28,7 @@ class MainWindowTest {
     @BeforeEach
     void setUp() throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeAndWait(() -> {
-            mainWindow = new MainWindow(snipersTableModel);
+            mainWindow = new MainWindow(sniperPortfolio);
             window = new FrameFixture(mainWindow);
         });
         mainWindow.addUserRequestListener(userRequestListener);
