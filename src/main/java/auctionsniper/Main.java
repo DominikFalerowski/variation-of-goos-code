@@ -2,7 +2,6 @@ package auctionsniper;
 
 
 import auctionsniper.ui.MainWindow;
-import auctionsniper.ui.SwingThreadSniperListener;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -31,7 +30,7 @@ public class Main {
         ui.addUserRequestListener(itemId -> {
             ui.getSnipers().addSniper(SniperSnapshot.joining(itemId));
             Auction auction = auctionHouse.auctionFor(itemId);
-            auction.addAuctionEventListener(new AuctionSniper(auction, new SwingThreadSniperListener(ui.getSnipers()), itemId));
+            auction.addAuctionEventListener(new AuctionSniper(auction, itemId));
             auction.join();
         });
     }

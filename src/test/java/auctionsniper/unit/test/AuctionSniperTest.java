@@ -26,7 +26,8 @@ class AuctionSniperTest {
 
     @BeforeEach
     void setUp() {
-        sniper = new AuctionSniper(auction, sniperListener, ITEM_ID);
+        sniper = new AuctionSniper(auction, ITEM_ID);
+        sniper.addSniperListener(sniperListener);
     }
 
     @Test

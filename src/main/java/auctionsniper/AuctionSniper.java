@@ -1,23 +1,27 @@
 package auctionsniper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class AuctionSniper implements AuctionEventListener {
 
+    private final List<SniperListener> listeners = new ArrayList<>();
     private final Auction auction;
-    private final SniperListener sniperListener;
     private SniperSnapshot sniperSnapshot;
 
-    public AuctionSniper(Auction auction, SniperListener sniperListener, String itemId) {
+    public AuctionSniper(Auction auction, String itemId) {
         this.auction = auction;
-        this.sniperListener = sniperListener;
         this.sniperSnapshot = SniperSnapshot.joining(itemId);
     }
-
 
     public void auctionClosed() {
         sniperSnapshot = sniperSnapshot.closed();
         notifyChange();
+    }
+
+    public void addSniperListener(SniperListener listener) {
+        listeners.add(listener);
     }
 
     @Override
@@ -36,7 +40,7 @@ public class AuctionSniper implements AuctionEventListener {
     }
 
     private void notifyChange() {
-        sniperListener.sniperStateChanged(sniperSnapshot);
+        listeners.forEach(listener -> listener.sniperStateChanged(sniperSnapshot));
     }
 
     @Override
@@ -45,12 +49,11 @@ public class AuctionSniper implements AuctionEventListener {
         if (o == null || getClass() != o.getClass()) return false;
         AuctionSniper that = (AuctionSniper) o;
         return Objects.equals(auction, that.auction) &&
-                Objects.equals(sniperListener, that.sniperListener) &&
                 Objects.equals(sniperSnapshot, that.sniperSnapshot);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(auction, sniperListener, sniperSnapshot);
+        return Objects.hash(auction, sniperSnapshot);
     }
 }
