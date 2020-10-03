@@ -2,6 +2,7 @@ package auctionsniper;
 
 
 import auctionsniper.ui.MainWindow;
+import auctionsniper.xmpp.XMPPAuctionHouse;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;

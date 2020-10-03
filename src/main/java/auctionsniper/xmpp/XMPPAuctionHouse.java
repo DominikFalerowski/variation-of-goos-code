@@ -1,5 +1,7 @@
-package auctionsniper;
+package auctionsniper.xmpp;
 
+import auctionsniper.Auction;
+import auctionsniper.AuctionHouse;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -10,7 +12,7 @@ import java.io.IOException;
 
 import static auctionsniper.ConnectionConfig.configuration;
 
-class XMPPAuctionHouse implements AuctionHouse {
+public class XMPPAuctionHouse implements AuctionHouse {
 
     public static final String AUCTION_RESOURCE = "Auction";
 
@@ -28,7 +30,7 @@ class XMPPAuctionHouse implements AuctionHouse {
             return new XMPPAuctionHouse(connection);
         } catch (XMPPException | InterruptedException | IOException | SmackException e) {
             Thread.currentThread().interrupt();
-            throw new XmppAuctionException("Could not connect to auction ", e);
+            throw new XMMPAuctionException("Could not connect to auction ", e);
         }
     }
 

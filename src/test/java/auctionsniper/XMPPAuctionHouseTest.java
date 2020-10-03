@@ -2,6 +2,7 @@ package auctionsniper;
 
 import auctionsniper.endtoend.test.ApplicationRunner;
 import auctionsniper.endtoend.test.FakeAuctionServer;
+import auctionsniper.xmpp.XMPPAuctionHouse;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.junit.jupiter.api.AfterEach;

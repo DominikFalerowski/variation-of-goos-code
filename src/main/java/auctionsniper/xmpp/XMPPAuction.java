@@ -1,5 +1,8 @@
-package auctionsniper;
+package auctionsniper.xmpp;
 
+import auctionsniper.Auction;
+import auctionsniper.AuctionEventListener;
+import auctionsniper.AuctionMessageTranslator;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.chat2.Chat;
@@ -59,7 +62,7 @@ public class XMPPAuction implements Auction {
         try {
             return JidCreate.entityBareFrom(auctionId);
         } catch (XmppStringprepException e) {
-            throw new XmppParsingException(e);
+            throw new XMPPParsingException(e);
         }
     }
 
