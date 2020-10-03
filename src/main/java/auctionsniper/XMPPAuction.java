@@ -12,7 +12,7 @@ import static auctionsniper.Main.BID_COMMAND_FORMAT;
 import static auctionsniper.Main.JOIN_COMMAND_FORMAT;
 import static java.lang.String.format;
 
-class XMPPAuction implements Auction {
+public class XMPPAuction implements Auction {
 
     private final Chat chat;
     private final ChatManager chatManager;
@@ -22,7 +22,7 @@ class XMPPAuction implements Auction {
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
-    XMPPAuction(AbstractXMPPConnection connection, String itemId) {
+    public XMPPAuction(AbstractXMPPConnection connection, String itemId) {
         this.connection = connection;
         chatManager = ChatManager.getInstanceFor(connection);
         entityAuctionId = entityId(auctionId(itemId, connection));
