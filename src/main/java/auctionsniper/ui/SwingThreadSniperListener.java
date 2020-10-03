@@ -5,7 +5,7 @@ import auctionsniper.SniperSnapshot;
 
 import javax.swing.*;
 
-public class SwingThreadSniperListener implements SniperListener {
+class SwingThreadSniperListener implements SniperListener {
 
     private final SnipersTableModel snipers;
 
