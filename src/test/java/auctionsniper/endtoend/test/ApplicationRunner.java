@@ -2,23 +2,23 @@ package auctionsniper.endtoend.test;
 
 
 import auctionsniper.Main;
-import auctionsniper.ui.MainWindow;
 import auctionsniper.SniperState;
+import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SnipersTableModel;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 
 import static auctionsniper.SniperState.JOINING;
-import static auctionsniper.ui.SnipersTableModel.textFor;
 import static auctionsniper.endtoend.test.FakeAuctionServer.AUCTION_RESOURCE;
 import static auctionsniper.endtoend.test.FakeAuctionServer.XMPP_HOSTNAME;
+import static auctionsniper.ui.SnipersTableModel.textFor;
 
 
-class ApplicationRunner {
+public class ApplicationRunner {
 
-    private static final String SNIPER_ID = "sniper";
-    private static final String SNIPER_PASSWORD = "sniper";
+    public static final String SNIPER_ID = "sniper";
+    public static final String SNIPER_PASSWORD = "sniper";
     public static final String SNIPER_XMPP_ID = SNIPER_ID + "@" + XMPP_HOSTNAME + "/" + AUCTION_RESOURCE;
 
     private AuctionSniperDriver driver;

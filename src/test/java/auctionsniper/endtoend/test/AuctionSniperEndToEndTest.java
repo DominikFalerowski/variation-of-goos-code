@@ -1,25 +1,16 @@
 package auctionsniper.endtoend.test;
 
-import auctionsniper.Auction;
-import auctionsniper.AuctionEventListener;
-import auctionsniper.XMPPAuction;
-import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import static auctionsniper.endtoend.test.ApplicationRunner.SNIPER_XMPP_ID;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class AuctionSniperEndToEndTest {
 
-    private FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");
-    private FakeAuctionServer auctionServer2 = new FakeAuctionServer("item-65432");
-    private ApplicationRunner application = new ApplicationRunner();
+    private final FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");
+    private final FakeAuctionServer auctionServer2 = new FakeAuctionServer("item-65432");
+    private final ApplicationRunner application = new ApplicationRunner();
 
 
     AuctionSniperEndToEndTest() throws XmppStringprepException {

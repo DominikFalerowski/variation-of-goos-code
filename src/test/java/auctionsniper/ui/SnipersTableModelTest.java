@@ -2,8 +2,6 @@ package auctionsniper.ui;
 
 import auctionsniper.SniperSnapshot;
 import auctionsniper.SniperState;
-import auctionsniper.ui.Column;
-import auctionsniper.ui.SnipersTableModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

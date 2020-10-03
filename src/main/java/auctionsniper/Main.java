@@ -3,17 +3,9 @@ package auctionsniper;
 
 import auctionsniper.ui.MainWindow;
 import auctionsniper.ui.SwingThreadSniperListener;
-import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.tcp.XMPPTCPConnection;
-import org.jxmpp.jid.parts.Resourcepart;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
-
-import static auctionsniper.ConnectionConfig.configuration;
 
 public class Main {
 
@@ -24,42 +16,33 @@ public class Main {
     private static final int ARG_PASSWORD = 2;
     private final MainWindow ui;
 
-    public static final String AUCTION_RESOURCE = "Auction";
-
     public Main(MainWindow ui) {
         this.ui = ui;
     }
 
-    public static void main(MainWindow ui, String... args) throws InterruptedException, IOException, SmackException, XMPPException {
+    public static void main(MainWindow ui, String... args) {
         Main main = new Main(ui);
-        AbstractXMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
-        main.disconnectWhenUICloses(connection);
-        main.addUserRequestListenerFor(connection);
+        XMPPAuctionHouse auctionHouse = XMPPAuctionHouse.connect(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
+        main.disconnectWhenUICloses(auctionHouse);
+        main.addUserRequestListenerFor(auctionHouse);
     }
 
-    private void addUserRequestListenerFor(AbstractXMPPConnection connection) {
+    private void addUserRequestListenerFor(AuctionHouse auctionHouse) {
         ui.addUserRequestListener(itemId -> {
             ui.getSnipers().addSniper(SniperSnapshot.joining(itemId));
-            Auction auction = new XMPPAuction(connection, itemId);
+            Auction auction = auctionHouse.auctionFor(itemId);
             auction.addAuctionEventListener(new AuctionSniper(auction, new SwingThreadSniperListener(ui.getSnipers()), itemId));
             auction.join();
         });
     }
 
-    private void disconnectWhenUICloses(AbstractXMPPConnection connection) {
+    private void disconnectWhenUICloses(AuctionHouse auctionHouse) {
         ui.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                connection.disconnect();
+                auctionHouse.disconnect();
             }
         });
     }
 
-    private static AbstractXMPPConnection connection(String hostname, String username, String password) throws XMPPException, InterruptedException, IOException, SmackException {
-        AbstractXMPPConnection connection = new XMPPTCPConnection(configuration(hostname, username, password));
-        connection.connect();
-        connection.login(username, password, Resourcepart.from(AUCTION_RESOURCE));
-
-        return connection;
-    }
 }

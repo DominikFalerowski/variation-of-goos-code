@@ -21,7 +21,7 @@ import static auctionsniper.ConnectionConfig.configuration;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FakeAuctionServer {
+public class FakeAuctionServer {
 
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_RESOURCE = "Auction";

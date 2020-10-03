@@ -1,8 +1,6 @@
 package auctionsniper.ui;
 
 import auctionsniper.UserRequestListener;
-import auctionsniper.ui.MainWindow;
-import auctionsniper.ui.SnipersTableModel;
 import org.assertj.swing.fixture.FrameFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.swing.*;
-
 import java.lang.reflect.InvocationTargetException;
 
 import static org.mockito.Mockito.times;
