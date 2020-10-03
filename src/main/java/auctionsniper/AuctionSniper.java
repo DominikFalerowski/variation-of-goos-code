@@ -56,4 +56,8 @@ public class AuctionSniper implements AuctionEventListener {
     public int hashCode() {
         return Objects.hash(auction, sniperSnapshot);
     }
+
+    public SniperSnapshot getSnapshot() {
+        return sniperSnapshot;
+    }
 }

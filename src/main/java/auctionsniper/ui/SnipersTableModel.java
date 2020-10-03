@@ -1,16 +1,16 @@
 package auctionsniper.ui;
 
-import auctionsniper.SniperSnapshot;
-import auctionsniper.SniperState;
+import auctionsniper.*;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SnipersTableModel extends AbstractTableModel {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener, SniperCollector {
 
     private static final String[] STATUS_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won"};
     private final List<SniperSnapshot> snapshots = new ArrayList<>();
+    private final List<AuctionSniper> snipers = new ArrayList<>();
 
     @Override
     public int getRowCount() {
@@ -47,8 +47,15 @@ public class SnipersTableModel extends AbstractTableModel {
         throw new IllegalArgumentException("Cannot find match for " + sniperSnapshot);
     }
 
-    public void addSniper(SniperSnapshot sniperSnapshot) {
-        snapshots.add(sniperSnapshot);
+    @Override
+    public void addSniper(AuctionSniper sniper) {
+        snipers.add(sniper);
+        addSniperSnapshot(sniper.getSnapshot());
+        sniper.addSniperListener(new SwingThreadSniperListener(this));
+    }
+
+    private void addSniperSnapshot(SniperSnapshot snapshot) {
+        snapshots.add(snapshot);
         int row = snapshots.size() - 1;
         fireTableRowsInserted(row, row);
     }

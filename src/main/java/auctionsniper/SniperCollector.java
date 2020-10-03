@@ -1,5 +1,5 @@
 package auctionsniper;
 
-interface SniperCollector {
+public interface SniperCollector {
     void addSniper(AuctionSniper sniper);
 }

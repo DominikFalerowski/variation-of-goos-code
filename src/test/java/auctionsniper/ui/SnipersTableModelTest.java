@@ -1,7 +1,6 @@
 package auctionsniper.ui;
 
-import auctionsniper.SniperSnapshot;
-import auctionsniper.SniperState;
+import auctionsniper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +15,7 @@ import static auctionsniper.ui.SnipersTableModel.textFor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.mockito.ArgumentMatchers.refEq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SnipersTableModelTest {
@@ -40,10 +38,11 @@ class SnipersTableModelTest {
 
     @Test
     void setsSniperValuesInColumns() {
-        SniperSnapshot joining = SniperSnapshot.joining("item id");
+        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), "item id");
+        SniperSnapshot joining = auctionSniper.getSnapshot();
         SniperSnapshot bidding = joining.bidding(555, 666);
 
-        model.addSniper(joining);
+        model.addSniper(auctionSniper);
         model.sniperStateChanged(bidding);
 
         verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0, 0, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT)));
@@ -57,9 +56,10 @@ class SnipersTableModelTest {
 
     @Test
     void notifiesListenersWhenAddingASniper() {
-        SniperSnapshot joining = SniperSnapshot.joining("item123");
+        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), "item123");
+        SniperSnapshot joining = auctionSniper.getSnapshot();
 
-        model.addSniper(joining);
+        model.addSniper(auctionSniper);
 
         verify(listener, times(1)).tableChanged(refEq(new TableModelEvent(model, 0, 0, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT)));
         assertThat(model.getRowCount()).isEqualTo(1);
@@ -68,8 +68,10 @@ class SnipersTableModelTest {
 
     @Test
     void holdsSnipersInAdditionOrder() {
-        model.addSniper(SniperSnapshot.joining("item 0"));
-        model.addSniper(SniperSnapshot.joining("item 1"));
+        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), "item 0");
+        AuctionSniper auctionSniper2 = new AuctionSniper(mock(Auction.class), "item 1");
+        model.addSniper(auctionSniper);
+        model.addSniper(auctionSniper2);
 
         assertThat(cellValue(0, Column.ITEM_IDENTIFIER)).isEqualTo("item 0");
         assertThat(cellValue(1, Column.ITEM_IDENTIFIER)).isEqualTo("item 1");

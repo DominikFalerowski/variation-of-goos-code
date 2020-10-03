@@ -28,9 +28,10 @@ public class Main {
 
     private void addUserRequestListenerFor(AuctionHouse auctionHouse) {
         ui.addUserRequestListener(itemId -> {
-            ui.getSnipers().addSniper(SniperSnapshot.joining(itemId));
             Auction auction = auctionHouse.auctionFor(itemId);
-            auction.addAuctionEventListener(new AuctionSniper(auction, itemId));
+            AuctionSniper auctionSniper = new AuctionSniper(auction, itemId);
+            auction.addAuctionEventListener(auctionSniper);
+            ui.getSnipers().addSniper(auctionSniper);
             auction.join();
         });
     }
