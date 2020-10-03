@@ -10,7 +10,6 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
     private static final String[] STATUS_TEXT = {"Joining", "Bidding", "Winning", "Lost", "Won"};
     private final List<SniperSnapshot> snapshots = new ArrayList<>();
-    private final List<AuctionSniper> snipers = new ArrayList<>();
 
     public static String textFor(SniperState state) {
         return STATUS_TEXT[state.ordinal()];
