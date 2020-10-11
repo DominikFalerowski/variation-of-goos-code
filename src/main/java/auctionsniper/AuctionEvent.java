@@ -39,8 +39,12 @@ class AuctionEvent {
         return sniperId.equals(bidder()) ? FROM_SNIPER : FROM_OTHER_BIDDER;
     }
 
-    private String get(String fieldName) {
-        return fields.get(fieldName);
+    private String get(String name) {
+        String value = fields.get(name);
+        if (value == null) {
+            throw new MissingValueException(name);
+        }
+        return value;
     }
 
     private int getInt(String fieldName) {

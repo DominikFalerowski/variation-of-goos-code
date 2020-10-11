@@ -20,6 +20,14 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
 
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
+        try {
+            translate(from, message);
+        } catch (Exception parseException) {
+            listener.auctionFailed();
+        }
+    }
+
+    private void translate(EntityBareJid from, Message message) {
         if (handle(from)) {
             AuctionEvent event = AuctionEvent.from(message.getBody());
             String eventType = event.type();
