@@ -1,5 +1,6 @@
 package auctionsniper.ui;
 
+import auctionsniper.Item;
 import auctionsniper.SniperPortfolio;
 import auctionsniper.UserRequestListener;
 import org.assertj.swing.fixture.FrameFixture;
@@ -39,6 +40,6 @@ class MainWindowTest {
         window.textBox(MainWindow.NEW_ITEM_ID_NAME).deleteText().enterText("an item id");
         window.button(MainWindow.JOIN_BUTTON_NAME).click();
 
-        verify(userRequestListener, times(1)).joinAuction("an item id");
+        verify(userRequestListener, times(1)).joinAuction(new Item("an item-id", 789));
     }
 }

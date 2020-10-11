@@ -2,7 +2,7 @@ package auctionsniper;
 
 import java.util.Objects;
 
-class Item {
+public class Item {
 
     private final String identifier;
     private final int stopPrice;
