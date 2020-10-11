@@ -39,8 +39,8 @@ public class ApplicationRunner {
         }
     }
 
-    public void startBiddingWithStopPrice(FakeAuctionServer auctionServer, int stopPrice) {
-
+    public void startBiddingWithStopPrice(FakeAuctionServer auction, int stopPrice) {
+        startBiddingIn(auction);
     }
 
     public void stop() {
@@ -57,8 +57,8 @@ public class ApplicationRunner {
         driver.showsSniperStatus(auction.getItemId(), winningBid, winningBid, textFor(SniperState.WINNING), rowIndex);
     }
 
-    public void hasShownSniperIsLosing(FakeAuctionServer auctionServer, int winningBid, int lastBid, int rowIndex) {
-
+    public void hasShownSniperIsLosing(FakeAuctionServer auction, int winningBid, int lastBid, int rowIndex) {
+        driver.showsSniperStatus(auction.getItemId(), winningBid, lastBid, textFor(SniperState.LOSING), rowIndex);
     }
 
     public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice, int rowIndex) {
