@@ -5,6 +5,7 @@ import auctionsniper.UserRequestListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.NumberFormat;
 
 public class MainWindow extends JFrame {
 
@@ -44,9 +45,11 @@ public class MainWindow extends JFrame {
     private JPanel makeControls() {
         JPanel controls = new JPanel(new FlowLayout());
         JTextField itemIdField = new JTextField();
+        JFormattedTextField stopPriceField = stopPriceField();
         itemIdField.setColumns(25);
         itemIdField.setName(NEW_ITEM_ID_NAME);
         controls.add(itemIdField);
+        controls.add(stopPriceField);
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);
@@ -58,6 +61,13 @@ public class MainWindow extends JFrame {
         controls.add(joinAuctionButton);
 
         return controls;
+    }
+
+    private JFormattedTextField stopPriceField() {
+        JFormattedTextField stopPriceField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+        stopPriceField.setColumns(7);
+        stopPriceField.setName(NEW_ITEM_STOP_PRICE_NAME);
+        return stopPriceField;
     }
 
     public void addUserRequestListener(UserRequestListener userRequestListener) {
