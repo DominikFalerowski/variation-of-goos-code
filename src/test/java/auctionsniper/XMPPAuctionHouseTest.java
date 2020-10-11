@@ -42,7 +42,7 @@ class XMPPAuctionHouseTest {
     void receivesEventsFromAuctionServerAfterJoining() throws InterruptedException, SmackException.NotConnectedException {
         CountDownLatch auctionWasClosed = new CountDownLatch(1);
 
-        Auction auction = auctionHouse.auctionFor(auctionServer.getItemId());
+        Auction auction = auctionHouse.auctionFor(new Item(auctionServer.getItemId(), 567));
         auction.addAuctionEventListener(auctionClosedListener(auctionWasClosed));
         auction.join();
         auctionServer.hasReceivedJoinRequestFromSniper(ApplicationRunner.SNIPER_XMPP_ID);

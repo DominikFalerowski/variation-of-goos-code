@@ -95,7 +95,7 @@ class AuctionSniperEndToEndTest {
     @Test
     void sniperLosesAnAuctionWhenThePriceIsTooHigh() throws Exception {
         auctionServer.startSellingItem();
-        application.startBiddingWithStopPrice(auctionServer, 1100);
+        application.startBiddingWithStopPrice(auctionServer, 1100, 0);
         auctionServer.hasReceivedJoinRequestFromSniper(SNIPER_XMPP_ID);
         auctionServer.reportPrice(1000, 98, "other bidder");
         application.hasShownSniperIsBidding(auctionServer, 1000, 1098, 0);

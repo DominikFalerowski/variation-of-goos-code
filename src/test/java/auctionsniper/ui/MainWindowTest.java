@@ -38,8 +38,9 @@ class MainWindowTest {
     @Test
     void makesUserRequestWhenJoinButtonClicked() {
         window.textBox(MainWindow.NEW_ITEM_ID_NAME).deleteText().enterText("an item id");
+        window.textBox(MainWindow.NEW_ITEM_STOP_PRICE_NAME).deleteText().enterText("789");
         window.button(MainWindow.JOIN_BUTTON_NAME).click();
 
-        verify(userRequestListener, times(1)).joinAuction(new Item("an item-id", 789));
+        verify(userRequestListener, times(1)).joinAuction(new Item("an item id", 789));
     }
 }

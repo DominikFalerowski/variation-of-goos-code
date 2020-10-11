@@ -26,7 +26,7 @@ class AuctionSniperTest {
 
     @BeforeEach
     void setUp() {
-        sniper = new AuctionSniper(auction, ITEM_ID);
+        sniper = new AuctionSniper(auction, new Item(ITEM_ID, 1234));
         sniper.addSniperListener(sniperListener);
     }
 
@@ -71,5 +71,60 @@ class AuctionSniperTest {
         sniper.currentPrice(135, 12, FROM_SNIPER);
 
         verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, 135, 135, SniperState.WINNING));
+    }
+
+    @Test
+    void doesNotBidAndReportsLosingIfFirstPriceIsAboveStopPrice() {
+        int price = 1223;
+        int increment = 25;
+
+        sniper.currentPrice(price, increment, FROM_OTHER_BIDDER);
+
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, price, 0, SniperState.LOSING));
+    }
+
+    @Test
+    void doesNotBidAndReportsLosingIfSubsequentPriceIsAboveStopPrice() {
+        int bid = 123 + 45;
+
+        sniper.currentPrice(123, 45, FROM_OTHER_BIDDER);
+        sniper.currentPrice(2345, 25, FROM_OTHER_BIDDER);
+
+        verify(auction, times(1)).bid(bid);
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, 2345, bid, SniperState.LOSING));
+    }
+
+    @Test
+    void doesNotBidAndReportsLosingIfPriceAfterWinningIsAboveStopPrice() {
+        int price = 1223;
+        int increment = 25;
+        int bid = 123 + 45;
+
+        sniper.currentPrice(123, 45, FROM_OTHER_BIDDER);
+        sniper.currentPrice(168, 45, FROM_SNIPER);
+        sniper.currentPrice(price, increment, FROM_OTHER_BIDDER);
+
+        verify(auction, times(1)).bid(bid);
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, SniperState.LOSING));
+    }
+
+    @Test
+    void continuesToBeLosingOnceStopPriceHasBeenReached() {
+        int price1 = 1233;
+        int price2 = 1258;
+
+        sniper.currentPrice(price1, 25, FROM_OTHER_BIDDER);
+        sniper.currentPrice(price2, 25, FROM_OTHER_BIDDER);
+
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, price1, 0, SniperState.LOSING));
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, price2, 0, SniperState.LOSING));
+    }
+
+    @Test
+    void reportsLostIfAuctionClosesWhenLosing() {
+        sniper.currentPrice(1230, 456, FROM_OTHER_BIDDER);
+        sniper.auctionClosed();
+
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(new SniperSnapshot(ITEM_ID, 1230, 0, SniperState.LOSING));
     }
 }

@@ -1,9 +1,6 @@
 package auctionsniper.ui;
 
-import auctionsniper.Auction;
-import auctionsniper.AuctionSniper;
-import auctionsniper.SniperSnapshot;
-import auctionsniper.SniperState;
+import auctionsniper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +38,7 @@ class SnipersTableModelTest {
 
     @Test
     void setsSniperValuesInColumns() {
-        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), "item id");
+        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), new Item("item id", 0));
         SniperSnapshot joining = auctionSniper.getSnapshot();
         SniperSnapshot bidding = joining.bidding(555, 666);
 
@@ -59,7 +56,7 @@ class SnipersTableModelTest {
 
     @Test
     void notifiesListenersWhenAddingASniper() {
-        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), "item123");
+        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), new Item("item123", 0));
         SniperSnapshot joining = auctionSniper.getSnapshot();
 
         model.sniperAdded(auctionSniper);
@@ -71,8 +68,8 @@ class SnipersTableModelTest {
 
     @Test
     void holdsSnipersInAdditionOrder() {
-        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), "item 0");
-        AuctionSniper auctionSniper2 = new AuctionSniper(mock(Auction.class), "item 1");
+        AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), new Item("item 0", 0));
+        AuctionSniper auctionSniper2 = new AuctionSniper(mock(Auction.class), new Item( "item 1", 0));
         model.sniperAdded(auctionSniper);
         model.sniperAdded(auctionSniper2);
 

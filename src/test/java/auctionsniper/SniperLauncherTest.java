@@ -12,11 +12,11 @@ class SniperLauncherTest {
 
     @Test
     void addsNewSniperToCollectorAndThenJoinsAuction() {
-        String itemId = "item 123";
-        when(auctionHouse.auctionFor(itemId)).thenReturn(auction);
-        AuctionSniper auctionSniper = new AuctionSniper(auction, itemId);
+        Item item = new Item("item 123", 1234);
+        when(auctionHouse.auctionFor(item)).thenReturn(auction);
+        AuctionSniper auctionSniper = new AuctionSniper(auction, item);
 
-        sniperLauncher.joinAuction(itemId);
+        sniperLauncher.joinAuction(item);
 
         verify(auction, times(1)).addAuctionEventListener(auctionSniper);
         verify(sniperCollector, times(1)).addSniper(auctionSniper);
