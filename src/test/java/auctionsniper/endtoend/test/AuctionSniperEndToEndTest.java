@@ -125,13 +125,13 @@ class AuctionSniperEndToEndTest {
         auctionServer.hasReceivedBid(520, SNIPER_XMPP_ID);
 
         auctionServer.sendInvalidMessageContaining(brokenMessage);
-        application.showsSniperHasFailed(auctionServer);
+        application.showsSniperHasFailed(auctionServer, 0);
 
         auctionServer.reportPrice(520, 21, "other bidder");
         waitForAnotherAuctionEvent();
 
         application.reportsInvalidMessage(auctionServer, brokenMessage);
-        application.showsSniperHasFailed(auctionServer);
+        application.showsSniperHasFailed(auctionServer, 0);
     }
 
     private void waitForAnotherAuctionEvent() throws Exception {
