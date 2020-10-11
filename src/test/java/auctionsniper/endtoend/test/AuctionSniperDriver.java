@@ -64,8 +64,9 @@ public class AuctionSniperDriver {
         return tableCell != null && tableCell.value().equals(valueToCompare);
     }
 
-    public void startBiddingFor(String itemId) {
+    public void startBiddingFor(String itemId, int stopPrice) {
         window.textBox(MainWindow.NEW_ITEM_ID_NAME).deleteText().enterText(itemId);
+        window.textBox(MainWindow.NEW_ITEM_STOP_PRICE_NAME).deleteText().enterText(String.valueOf(stopPrice));
         window.button(MainWindow.JOIN_BUTTON_NAME).click();
     }
 }

@@ -12,6 +12,7 @@ public class MainWindow extends JFrame {
     public static final String NEW_ITEM_ID_NAME = "New item id";
     public static final String JOIN_BUTTON_NAME = "Join Button";
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
+    public static final String NEW_ITEM_STOP_PRICE_NAME = "New item stop price";
 
     private UserRequestListener userRequestListener;
 

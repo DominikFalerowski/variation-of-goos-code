@@ -34,9 +34,13 @@ public class ApplicationRunner {
         startSniper(auctions);
         for (int i = 0; i < auctions.length; i++) {
             FakeAuctionServer auction = auctions[i];
-            driver.startBiddingFor(auction.getItemId());
+            driver.startBiddingFor(auction.getItemId(), Integer.MAX_VALUE);
             driver.showsSniperStatus(auction.getItemId(), 0, 0, textFor(JOINING), i);
         }
+    }
+
+    public void startBiddingWithStopPrice(FakeAuctionServer auctionServer, int stopPrice) {
+
     }
 
     public void stop() {
@@ -51,6 +55,10 @@ public class ApplicationRunner {
 
     public void hasShownSniperIsWinning(FakeAuctionServer auction, int winningBid, int rowIndex) {
         driver.showsSniperStatus(auction.getItemId(), winningBid, winningBid, textFor(SniperState.WINNING), rowIndex);
+    }
+
+    public void hasShownSniperIsLosing(FakeAuctionServer auctionServer, int winningBid, int lastBid, int rowIndex) {
+
     }
 
     public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice, int rowIndex) {

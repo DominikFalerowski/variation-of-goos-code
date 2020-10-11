@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import static auctionsniper.endtoend.test.ApplicationRunner.SNIPER_ID;
 import static auctionsniper.endtoend.test.ApplicationRunner.SNIPER_XMPP_ID;
 
 class AuctionSniperEndToEndTest {
@@ -89,5 +90,25 @@ class AuctionSniperEndToEndTest {
 
         application.showsSniperHasWonAuction(auctionServer, 1098, 0);
         application.showsSniperHasWonAuction(auctionServer2, 521, 1);
+    }
+
+    @Test
+    void sniperLosesAnAuctionWhenThePriceIsTooHigh() throws Exception {
+        auctionServer.startSellingItem();
+        application.startBiddingWithStopPrice(auctionServer, 1100);
+        auctionServer.hasReceivedJoinRequestFromSniper(SNIPER_XMPP_ID);
+        auctionServer.reportPrice(1000, 98, "other bidder");
+        application.hasShownSniperIsBidding(auctionServer, 1000, 1098, 0);
+
+        auctionServer.hasReceivedBid(1098, SNIPER_XMPP_ID);
+
+        auctionServer.reportPrice(1197, 10, "third party");
+        application.hasShownSniperIsLosing(auctionServer, 1197, 1098, 0);
+
+        auctionServer.reportPrice(1207, 10, "fourth party");
+        application.hasShownSniperIsLosing(auctionServer, 1207, 1098, 0);
+
+        auctionServer.announceClosed();
+        application.showSniperHasLostAuction(auctionServer, 1207, 1098, 0);
     }
 }
