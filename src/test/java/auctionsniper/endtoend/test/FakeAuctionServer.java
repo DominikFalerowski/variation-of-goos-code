@@ -76,6 +76,10 @@ public class FakeAuctionServer {
         assertThat(currentChat.getXmppAddressOfChatPartner().toString() + "/" + AUCTION_RESOURCE).hasToString(sniperId);
     }
 
+    public void sendInvalidMessageContaining(String brokenMessage) {
+
+    }
+
     private class SingleMessageListener implements IncomingChatMessageListener {
 
         private final ArrayBlockingQueue<Message> messages = new ArrayBlockingQueue<>(1);

@@ -69,6 +69,14 @@ public class ApplicationRunner {
         driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid, textFor(SniperState.LOST), rowIndex);
     }
 
+    public void showsSniperHasFailed(FakeAuctionServer auction) {
+
+    }
+
+    public void reportsInvalidMessage(FakeAuctionServer auction, String brokenMessage) {
+
+    }
+
     private void startSniper(FakeAuctionServer... auctions) {
         Thread thread = new Thread("Test Application") {
             @Override
