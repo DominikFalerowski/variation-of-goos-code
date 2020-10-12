@@ -1,9 +1,11 @@
 package auctionsniper;
 
 
+import java.io.IOException;
+
+import static auctionsniper.SniperState.JOINING;
 import static auctionsniper.FakeAuctionServerE2E.AUCTION_RESOURCE;
 import static auctionsniper.FakeAuctionServerE2E.XMPP_HOSTNAME;
-import static auctionsniper.SniperState.JOINING;
 import static auctionsniper.ui.SnipersTableModel.textFor;
 
 
@@ -14,6 +16,7 @@ public class ApplicationRunnerE2E {
     public static final String SNIPER_XMPP_ID = SNIPER_ID + "@" + XMPP_HOSTNAME + "/" + AUCTION_RESOURCE;
 
     private AuctionSniperDriverE2E driver;
+    private AuctionLogDriver logDriver = new AuctionLogDriver();
 
     protected static String[] arguments(FakeAuctionServerE2E... auctions) {
         String[] arguments = new String[auctions.length + 3];
@@ -71,11 +74,12 @@ public class ApplicationRunnerE2E {
         driver.showsSniperStatus(auction.getItemId(), 0, 0, textFor(SniperState.FAILED), rowIndex);
     }
 
-    public void reportsInvalidMessage(FakeAuctionServerE2E auction, String brokenMessage) {
-
+    public void reportsInvalidMessage(FakeAuctionServerE2E auction, String brokenMessage) throws IOException {
+        logDriver.hasEntry(brokenMessage);
     }
 
     private void startSniper(FakeAuctionServerE2E... auctions) {
+        logDriver.clearLog();
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
@@ -90,7 +94,7 @@ public class ApplicationRunnerE2E {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriverE2E();
-//        driver.hasColumnTitles();
+        driver.hasColumnTitles();
     }
 
     private void openBiddingFor(FakeAuctionServerE2E auction, int stopPrice, int rowIndex) {

@@ -1,5 +1,6 @@
 package auctionsniper;
 
+import auctionsniper.xmpp.XMPPFailureReport;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
@@ -10,19 +11,21 @@ public class AuctionMessageTranslator implements IncomingChatMessageListener {
     private final AuctionEventListener listener;
     private final String sniperId;
     private final EntityBareJid auctionEntityId;
+    private final XMPPFailureReport failureReport;
 
-
-    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener, EntityBareJid auctionEntityId) {
+    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener, EntityBareJid auctionEntityId, XMPPFailureReport failureReport) {
         this.sniperId = sniperId;
         this.listener = listener;
         this.auctionEntityId = auctionEntityId;
+        this.failureReport = failureReport;
     }
 
     @Override
     public void newIncomingMessage(EntityBareJid from, Message message, Chat chat) {
         try {
             translate(from, message);
-        } catch (Exception parseException) {
+        } catch (RuntimeException parseException) {
+            failureReport.cannotTranslateMessage(sniperId, message.getBody(), parseException);
             listener.auctionFailed();
         }
     }

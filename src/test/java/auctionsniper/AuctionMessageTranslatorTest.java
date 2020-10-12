@@ -1,6 +1,7 @@
 package auctionsniper;
 
 import auctionsniper.AuctionEventListener.PriceSource;
+import auctionsniper.xmpp.XMPPFailureReport;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,8 @@ import org.jxmpp.stringprep.XmppStringprepException;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -22,13 +25,15 @@ class AuctionMessageTranslatorTest {
     private static final Chat UNUSED_CHAT = null;
     @Mock
     AuctionEventListener listener;
+    @Mock
+    XMPPFailureReport failureReport;
     private EntityBareJid entityBareJid;
     private AuctionMessageTranslator translator;
 
     @BeforeEach
     void setUp() throws XmppStringprepException {
         entityBareJid = JidCreate.entityBareFrom("any.any@any.pl");
-        translator = new AuctionMessageTranslator(SNIPER_ID, listener, entityBareJid);
+        translator = new AuctionMessageTranslator(SNIPER_ID, listener, entityBareJid, failureReport);
     }
 
     @Test
@@ -68,7 +73,12 @@ class AuctionMessageTranslatorTest {
 
         translator.newIncomingMessage(entityBareJid, message, UNUSED_CHAT);
 
+        expectFailureWithMessage(message);
+    }
+
+    private void expectFailureWithMessage(Message message) {
         verify(listener, times(1)).auctionFailed();
+        verify(failureReport, times(1)).cannotTranslateMessage(eq(SNIPER_ID), eq(message.getBody()), any(RuntimeException.class));
     }
 
     @Test
