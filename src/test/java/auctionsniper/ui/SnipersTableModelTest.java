@@ -69,7 +69,7 @@ class SnipersTableModelTest {
     @Test
     void holdsSnipersInAdditionOrder() {
         AuctionSniper auctionSniper = new AuctionSniper(mock(Auction.class), new Item("item 0", 0));
-        AuctionSniper auctionSniper2 = new AuctionSniper(mock(Auction.class), new Item( "item 1", 0));
+        AuctionSniper auctionSniper2 = new AuctionSniper(mock(Auction.class), new Item("item 1", 0));
         model.sniperAdded(auctionSniper);
         model.sniperAdded(auctionSniper2);
 

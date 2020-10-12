@@ -1,8 +1,6 @@
-package auctionsniper.unit.test;
+package auctionsniper;
 
-import auctionsniper.AuctionEventListener;
 import auctionsniper.AuctionEventListener.PriceSource;
-import auctionsniper.AuctionMessageTranslator;
 import org.jivesoftware.smack.chat2.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,8 +1,6 @@
-package auctionsniper;
+package auctionsniper.xmpp;
 
-import auctionsniper.endtoend.test.ApplicationRunner;
-import auctionsniper.endtoend.test.FakeAuctionServer;
-import auctionsniper.xmpp.XMPPAuctionHouse;
+import auctionsniper.*;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.junit.jupiter.api.AfterEach;
@@ -18,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class XMPPAuctionHouseTest {
 
-    private final FakeAuctionServer auctionServer = new FakeAuctionServer("item-54321");
+    private final FakeAuctionServerE2E auctionServer = new FakeAuctionServerE2E("item-54321");
     private XMPPAuctionHouse auctionHouse;
 
     XMPPAuctionHouseTest() throws XmppStringprepException {
@@ -26,7 +24,7 @@ class XMPPAuctionHouseTest {
 
     @BeforeEach
     void setUp() throws InterruptedException, IOException, SmackException, XMPPException {
-        auctionHouse = XMPPAuctionHouse.connect(FakeAuctionServer.XMPP_HOSTNAME, ApplicationRunner.SNIPER_ID, ApplicationRunner.SNIPER_PASSWORD);
+        auctionHouse = XMPPAuctionHouse.connect(FakeAuctionServerE2E.XMPP_HOSTNAME, ApplicationRunnerE2E.SNIPER_ID, ApplicationRunnerE2E.SNIPER_PASSWORD);
         auctionServer.startSellingItem();
     }
 
@@ -45,7 +43,7 @@ class XMPPAuctionHouseTest {
         Auction auction = auctionHouse.auctionFor(new Item(auctionServer.getItemId(), 567));
         auction.addAuctionEventListener(auctionClosedListener(auctionWasClosed));
         auction.join();
-        auctionServer.hasReceivedJoinRequestFromSniper(ApplicationRunner.SNIPER_XMPP_ID);
+        auctionServer.hasReceivedJoinRequestFromSniper(ApplicationRunnerE2E.SNIPER_XMPP_ID);
         auctionServer.announceClosed();
 
         assertThat(auctionWasClosed.await(4, TimeUnit.SECONDS)).as("should have been closed").isTrue();
@@ -65,7 +63,7 @@ class XMPPAuctionHouseTest {
 
             @Override
             public void auctionFailed() {
-                
+
             }
         };
     }

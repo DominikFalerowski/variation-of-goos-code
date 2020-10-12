@@ -5,8 +5,8 @@ import java.util.List;
 
 public class SniperPortfolio implements SniperCollector {
 
-    private List<PortfolioListener> listeners = new ArrayList<>();
-    private List<AuctionSniper> snipers = new ArrayList<>();
+    private final List<PortfolioListener> listeners = new ArrayList<>();
+    private final List<AuctionSniper> snipers = new ArrayList<>();
 
     @Override
     public void addSniper(AuctionSniper sniper) {

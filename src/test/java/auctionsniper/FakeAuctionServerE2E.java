@@ -1,6 +1,5 @@
-package auctionsniper.endtoend.test;
+package auctionsniper;
 
-import auctionsniper.Main;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -21,7 +20,7 @@ import static auctionsniper.ConnectionConfig.configuration;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FakeAuctionServer {
+public class FakeAuctionServerE2E {
 
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_RESOURCE = "Auction";
@@ -33,7 +32,7 @@ public class FakeAuctionServer {
     private final SingleMessageListener messageListener = new SingleMessageListener();
     private Chat currentChat;
 
-    public FakeAuctionServer(String itemId) throws XmppStringprepException {
+    public FakeAuctionServerE2E(String itemId) throws XmppStringprepException {
         this.itemId = itemId;
         this.connection = new XMPPTCPConnection(configuration(XMPP_HOSTNAME, format(ITEM_ID_AS_LOGIN, itemId), AUCTION_PASSWORD));
     }

@@ -1,24 +1,24 @@
-package auctionsniper.endtoend.test;
+package auctionsniper;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import static auctionsniper.endtoend.test.ApplicationRunner.SNIPER_XMPP_ID;
+import static auctionsniper.ApplicationRunnerE2E.SNIPER_XMPP_ID;
 
-class AuctionSniperEndToEndTest {
+class AuctionSniperTestE2E {
 
-    private FakeAuctionServer auctionServer;
-    private FakeAuctionServer auctionServer2;
-    private ApplicationRunner application;
+    private FakeAuctionServerE2E auctionServer;
+    private FakeAuctionServerE2E auctionServer2;
+    private ApplicationRunnerE2E application;
 
 
     @BeforeEach
     void setUp() throws XmppStringprepException {
-        application = new ApplicationRunner();
-        auctionServer = new FakeAuctionServer("item-54321");
-        auctionServer2 = new FakeAuctionServer("item-65432");
+        application = new ApplicationRunnerE2E();
+        auctionServer = new FakeAuctionServerE2E("item-54321");
+        auctionServer2 = new FakeAuctionServerE2E("item-65432");
     }
 
     @AfterEach
