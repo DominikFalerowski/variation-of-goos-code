@@ -25,6 +25,7 @@ public class XMPPAuction implements Auction {
     private final ChatManager chatManager;
     private final AbstractXMPPConnection connection;
     private final EntityBareJid entityAuctionId;
+    private AuctionMessageTranslator translator;
 
     public XMPPAuction(AbstractXMPPConnection connection, Item item) {
         this.connection = connection;
@@ -45,7 +46,15 @@ public class XMPPAuction implements Auction {
 
     @Override
     public void addAuctionEventListener(AuctionEventListener auctionEventListener) {
-        chatManager.addIncomingListener(new AuctionMessageTranslator(connection.getUser().toString(), auctionEventListener, entityAuctionId));
+        translator = new AuctionMessageTranslator(connection.getUser().toString(), auctionEventListener, entityAuctionId);
+        chatManager.addIncomingListener(translator);
+    }
+
+    @Override
+    public void removeAuctionEventListener() {
+        if (translator != null) {
+            chatManager.removeIncomingListener(translator);
+        }
     }
 
     private void sendMessage(String message) {

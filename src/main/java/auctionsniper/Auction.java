@@ -8,4 +8,6 @@ public interface Auction {
 
     void addAuctionEventListener(AuctionEventListener auctionEventListener);
 
+    void removeAuctionEventListener();
+
 }

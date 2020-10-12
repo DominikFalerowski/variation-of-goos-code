@@ -3,18 +3,23 @@ package auctionsniper.endtoend.test;
 import auctionsniper.ui.Column;
 import auctionsniper.ui.MainWindow;
 import org.assertj.swing.core.BasicComponentFinder;
+import org.assertj.swing.core.BasicRobot;
 import org.assertj.swing.core.ComponentFinder;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JTableCellFixture;
 import org.assertj.swing.fixture.JTableFixture;
+import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.assertj.swing.timing.Condition;
 
 import javax.swing.*;
 
+import java.util.concurrent.TimeUnit;
+
 import static auctionsniper.ui.MainWindow.MAIN_WINDOW_NAME;
 import static org.assertj.swing.data.TableCell.row;
 import static org.assertj.swing.edt.GuiActionRunner.execute;
+import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.assertj.swing.timing.Pause.pause;
 
 public class AuctionSniperDriver {
@@ -24,9 +29,7 @@ public class AuctionSniperDriver {
 
     public AuctionSniperDriver() {
         FailOnThreadViolationRepaintManager.install();
-        ComponentFinder finder = BasicComponentFinder.finderWithCurrentAwtHierarchy();
-        JFrame mainWindow = finder.findByName(MAIN_WINDOW_NAME, JFrame.class, true);
-        window = new FrameFixture(mainWindow);
+        window = findFrame(MAIN_WINDOW_NAME).withTimeout(10, TimeUnit.SECONDS).using(BasicRobot.robotWithCurrentAwtHierarchy());
         window.show();
         table = window.table(MainWindow.SNIPERS_TABLE_NAME);
     }

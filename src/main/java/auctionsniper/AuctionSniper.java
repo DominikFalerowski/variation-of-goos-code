@@ -20,6 +20,7 @@ public class AuctionSniper implements AuctionEventListener {
     public void auctionClosed() {
         sniperSnapshot = sniperSnapshot.closed();
         notifyChange();
+        auction.removeAuctionEventListener();
     }
 
     public void addSniperListener(SniperListener listener) {
@@ -49,6 +50,7 @@ public class AuctionSniper implements AuctionEventListener {
     public void auctionFailed() {
         sniperSnapshot = sniperSnapshot.failed();
         notifyChange();
+        auction.removeAuctionEventListener();
     }
 
     private void notifyChange() {

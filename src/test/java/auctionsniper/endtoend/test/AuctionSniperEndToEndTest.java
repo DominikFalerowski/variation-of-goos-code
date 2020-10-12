@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.jxmpp.stringprep.XmppStringprepException;
 
-import static auctionsniper.endtoend.test.ApplicationRunner.SNIPER_ID;
 import static auctionsniper.endtoend.test.ApplicationRunner.SNIPER_XMPP_ID;
 
 class AuctionSniperEndToEndTest {
@@ -17,16 +16,16 @@ class AuctionSniperEndToEndTest {
 
     @BeforeEach
     void setUp() throws XmppStringprepException {
+        application = new ApplicationRunner();
         auctionServer = new FakeAuctionServer("item-54321");
         auctionServer2 = new FakeAuctionServer("item-65432");
-        application = new ApplicationRunner();
     }
 
     @AfterEach
     void tearDown() {
-        application.stop();
         auctionServer.stop();
         auctionServer2.stop();
+        application.stop();
     }
 
     @Test

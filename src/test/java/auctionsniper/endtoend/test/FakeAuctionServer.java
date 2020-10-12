@@ -58,7 +58,7 @@ public class FakeAuctionServer {
     }
 
     public void stop() {
-        connection.disconnect();
+        connection.instantShutdown();
     }
 
     public void reportPrice(int price, int increment, String bidder) throws SmackException.NotConnectedException, InterruptedException {
@@ -76,8 +76,8 @@ public class FakeAuctionServer {
         assertThat(currentChat.getXmppAddressOfChatPartner().toString() + "/" + AUCTION_RESOURCE).hasToString(sniperId);
     }
 
-    public void sendInvalidMessageContaining(String brokenMessage) {
-
+    public void sendInvalidMessageContaining(String brokenMessage) throws SmackException.NotConnectedException, InterruptedException {
+        currentChat.send(brokenMessage);
     }
 
     private class SingleMessageListener implements IncomingChatMessageListener {

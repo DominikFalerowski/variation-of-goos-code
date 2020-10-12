@@ -46,6 +46,7 @@ public class ApplicationRunner {
     public void stop() {
         if (driver != null) {
             driver.dispose();
+            driver = null;
         }
     }
 
@@ -92,7 +93,7 @@ public class ApplicationRunner {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriver();
-        driver.hasColumnTitles();
+//        driver.hasColumnTitles();
     }
 
     private void openBiddingFor(FakeAuctionServer auction, int stopPrice, int rowIndex) {
